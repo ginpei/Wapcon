@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<!-- <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" /> -->
+		<link rel="stylesheet" href="./app.css" />
+		<title>Wapcon</title>
+		<style>
+			:root {
+				cursor: default;
+			}
+		</style>
+	</head>
+	<body>
+		<div v-show="ready" id="app" style="display: none;"></div>
+		<script>
+			// window.spawn = require('child_process').spawn;
+			window.shell = require('electron').shell;
+
+			document.addEventListener('click', (event)=>{
+				const elLink = event.target.closest('a[href^="http:"], a[href^="https:"]');
+				if (elLink) {
+					event.preventDefault();
+					const url = elLink.href;
+					window.shell.openItem(url);
+				}
+			});
+		</script>
+		<script src="../build/front.js"></script>
+	</body>
+</html>
