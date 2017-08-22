@@ -3,8 +3,7 @@
 		GHeading Machine
 		GSwitch
 		div.settings
-			GButton
-				i.fa.fa-cog(aria-hidden="true")
+			GIconButton(icon="cog")
 </template>
 
 <style lang="sass" scoped>
@@ -20,21 +19,17 @@
 
 	.settings
 		text-align: right
-
-	button
-		height: 50px
-		width: 50px
 </style>
 
 <script>
-	const GButton = require('../../components/form/GButton.vue')
 	const GHeading = require('../../components/form/GHeading.vue')
+	const GIconButton = require('../../components/form/GIconButton.vue')
 	const GSwitch = require('../../components/form/GSwitch.vue')
 
 	module.exports = {
 		components: {
-			GButton,
 			GHeading,
+			GIconButton,
 			GSwitch,
 		},
 

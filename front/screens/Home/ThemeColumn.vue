@@ -6,12 +6,9 @@
 			option My Wonderful Theme
 			option Samurai X
 		div.buttons
-			GButton
-				i.fa.fa-plus(aria-hidden="true")
-			GButton
-				i.fa.fa-minus(aria-hidden="true")
-			GButton.folder
-				i.fa.fa-folder-open-o(aria-hidden="true")
+			GIconButton(icon="plus")
+			GIconButton(icon="minus")
+			GIconButton.folder(icon="folder-open-o")
 </template>
 
 <style lang="sass" scoped>
@@ -33,13 +30,13 @@
 </style>
 
 <script>
-	const GButton = require('../../components/form/GButton.vue')
 	const GHeading = require('../../components/form/GHeading.vue')
+	const GIconButton = require('../../components/form/GIconButton.vue')
 
 	module.exports = {
 		components: {
-			GButton,
 			GHeading,
+			GIconButton,
 		},
 
 		data() {
