@@ -6,8 +6,8 @@ let win;
 
 function createWindow() {
 	win = new BrowserWindow({
-		height: 600,
-		width: 800,
+		height: 200,
+		width: 500,
 	});
 
 	win.loadURL(url.format({
@@ -15,6 +15,8 @@ function createWindow() {
 		protocol: 'file:',
 		slashes: true,
 	}));
+
+	win.setMenu(null);
 
 	win.webContents.openDevTools();
 

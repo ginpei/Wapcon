@@ -1,22 +1,25 @@
 <template lang="pug">
 	BaseLayout.root
-		h1 {{name}}
-		div
-			button(:disabled="$store.getters['volume/working']" @click="work_onClick") Work
-		p(v-show="!$store.getters['volume/working']") {{$store.state.volume.message}}
+		ThemeColumn
+		MachineColumn
 </template>
 
 <style lang="sass" scoped>
 	.root
-		text-align: center
+		display: flex
+		height: 100%
 </style>
 
 <script>
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
+	const ThemeColumn = require('./ThemeColumn.vue')
+	const MachineColumn = require('./MachineColumn.vue')
 
 	module.exports = {
 		components: {
 			BaseLayout,
+			ThemeColumn,
+			MachineColumn,
 		},
 
 		data() {

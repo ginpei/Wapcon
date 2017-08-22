@@ -2,6 +2,9 @@ html {
   height: 100%;
 }
 body {
+	background-color: #ccc;
+	background-image: linear-gradient(to bottom, hsl(200, 0%, 80%), hsl(200, 0%, 70%));
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.1) inset;
   height: 100%;
   margin: 0;
 }
