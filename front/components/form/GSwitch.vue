@@ -1,9 +1,10 @@
 <template lang="pug">
-	span.switch(@click.prevent="root_onClick")
+	span.switch(@click.prevent="root_onClick" :class="classes")
 		input.checkbox(:checked="on" type="checkbox")
 		span.label
 			span.on ON
 			span.separator
+				i.executingIndicator.fa.fa-spinner(aria-hidden="true")
 			span.off OFF
 </template>
 
@@ -51,7 +52,6 @@
 		color: #fff
 		text-shadow: -1px -1px rgba(0,0,0,.3)
 
-
 	.separator
 		background-color: #eee
 		border: solid 1px #999
@@ -60,6 +60,7 @@
 		box-shadow: 1px 2px #fff inset, -1px 2px #fff inset, 1px 1px 5px rgba(0,0,0,.2)
 		display: inline-block
 		height: $height
+		line-height: $height
 		margin: 0 ($height / -2)
 		position: relative
 		width: $height
@@ -70,14 +71,51 @@
 		color: #777
 		text-shadow: 1px 1px #fff
 
+	.executingIndicator
+		display: inline-block
+		height: $height
+		line-height: $height
+		text-align: center
+		visibility: hidden
+		width: $height
+
+	.executing
+		.executingIndicator
+			animation: rotate 1s linear infinite
+			visibility: visible
+
+		.on,
+		.off
+			background-color: #eee
+			background-image: none
+			// box-shadow: 3px 2px 10px rgba(0,0,0,.2) inset, -3px 2px 10px rgba(0,0,0,.2) inset
+			// box-shadow: 5px 5px 10px rgba(0,0,0,.2) inset
+			color: #999
+			text-shadow: 1px 1px #fff
+
+	@keyframes rotate
+		0%
+			transform: rotate(0deg)
+		100%
+			transform: rotate(360deg)
+
 </style>
 
 <script>
 	module.exports = {
 		props: [
+			'executing',
 			'on',
 			'onClick',
 		],
+
+		computed: {
+			classes() {
+				return {
+					executing: this.executing,
+				}
+			},
+		},
 
 		methods: {
 			root_onClick(event) {

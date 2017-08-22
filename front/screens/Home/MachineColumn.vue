@@ -2,7 +2,7 @@
 	div.controller
 		GHeading Machine
 		div.spacer
-		GSwitch(:on="machineOn" :onClick="onClick")
+		GSwitch(:on="machineOn" :executing="executingMachine" :onClick="onClick")
 		div.spacer
 		div.settings
 			GIconButton(title="Settings" icon="cog")
@@ -37,6 +37,7 @@
 
 		data() {
 			return {
+				executingMachine: false,
 				machineOn: false,
 			}
 		},
@@ -46,6 +47,9 @@
 				console.debug(this.machineOn, on);
 				this.machineOn = on
 				console.debug('->', this.machineOn);
+
+				this.executingMachine = true
+				setTimeout(_ => this.executingMachine = false, 1000)
 			},
 		},
 	}
