@@ -1,5 +1,5 @@
 <template lang="pug">
-	span.switch(@click.prevent="onClick")
+	span.switch(@click.prevent="root_onClick")
 		input.checkbox(:checked="on" type="checkbox")
 		span.label
 			span.on ON
@@ -78,5 +78,11 @@
 			'on',
 			'onClick',
 		],
+
+		methods: {
+			root_onClick(event) {
+				this.onClick({ on: !this.on })
+			},
+		},
 	}
 </script>

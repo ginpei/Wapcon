@@ -42,9 +42,9 @@
 		},
 
 		methods: {
-			onClick() {
-				console.debug(this.machineOn);
-				this.machineOn = !this.machineOn;
+			onClick({ on }) {
+				console.debug(this.machineOn, on);
+				this.machineOn = on
 				console.debug('->', this.machineOn);
 			},
 		},
