@@ -8,3 +8,7 @@ body {
   height: 100%;
   margin: 0;
 }
+body,
+input {
+	font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Segoe UI",SegoeUI,"Helvetica","Arial",sans-serif;
+}

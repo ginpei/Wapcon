@@ -6,6 +6,7 @@
 <style lang="sass" scoped>
 	.heading
 		font-size: 16px
+		font-weight: bold
 		height: 20px
 		line-height: 20px
 		text-shadow: 1px 1px #fff
