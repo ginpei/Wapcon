@@ -2,7 +2,7 @@
 	div.controller
 		GHeading Machine
 		div.spacer
-		GSwitch
+		GSwitch(:on="machineOn" :onClick="onClick")
 		div.spacer
 		div.settings
 			GIconButton(title="Settings" icon="cog")
@@ -37,10 +37,16 @@
 
 		data() {
 			return {
+				machineOn: false,
 			}
 		},
 
 		methods: {
+			onClick() {
+				console.debug(this.machineOn);
+				this.machineOn = !this.machineOn;
+				console.debug('->', this.machineOn);
+			},
 		},
 	}
 </script>

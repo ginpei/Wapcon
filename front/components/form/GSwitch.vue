@@ -1,6 +1,6 @@
 <template lang="pug">
-	label.switch
-		input(type="checkbox")
+	span.switch(@click.prevent="onClick")
+		input.checkbox(:checked="on" type="checkbox")
 		span.label
 			span.on ON
 			span.separator
@@ -8,27 +8,29 @@
 </template>
 
 <style lang="sass" scoped>
+	$height: 40px
+
 	.switch
-		border-radius: 20px
+		border-radius: $height / 2
 		border: solid 1px #999
 		display: inline-block
-		height: 40px
+		height: $height
 		overflow: hidden
 		-webkit-tap-highlight-color: transparent
 		tap-highlight-color: transparent
 		user-select: none
 		width: 100px
 
-	[type=checkbox]
+	.checkbox
 		display: none
 
 	.label
 		cursor: pointer
-		margin-left: -60px
+		margin-left: $height * -1.5
 		transition: margin .1s
 		white-space: nowrap
 
-	*:checked + .label
+	.checkbox:checked + .label
 		margin-left: 0
 
 	.label > *
@@ -37,10 +39,10 @@
 	.on,
 	.off
 		display: inline-block
-		height: 40px
-		line-height: 40px
+		height: $height
+		line-height: $height
 		text-align: center
-		width: 80px
+		width: $height * 2
 
 	.on
 		background-color: #00f
@@ -57,10 +59,10 @@
 		box-sizing: border-box
 		box-shadow: 1px 2px #fff inset, -1px 2px #fff inset, 1px 1px 5px rgba(0,0,0,.2)
 		display: inline-block
-		height: 40px
-		margin: 0 -20px
+		height: $height
+		margin: 0 ($height / -2)
 		position: relative
-		width: 40px
+		width: $height
 
 	.off
 		background-color: #eee
@@ -72,15 +74,9 @@
 
 <script>
 	module.exports = {
-		components: {
-		},
-
-		data() {
-			return {
-			}
-		},
-
-		methods: {
-		},
+		props: [
+			'on',
+			'onClick',
+		],
 	}
 </script>
