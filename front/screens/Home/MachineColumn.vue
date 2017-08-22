@@ -1,7 +1,7 @@
 <template lang="pug">
 	div.controller
-		Heading Machine
-		SwitchControl
+		GHeading Machine
+		GSwitch
 		div.settings
 			GButton
 				i.fa.fa-cog(aria-hidden="true")
@@ -28,14 +28,14 @@
 
 <script>
 	const GButton = require('../../components/form/GButton.vue')
-	const Heading = require('../../components/form/Heading.vue')
-	const SwitchControl = require('../../components/form/SwitchControl.vue')
+	const GHeading = require('../../components/form/GHeading.vue')
+	const GSwitch = require('../../components/form/GSwitch.vue')
 
 	module.exports = {
 		components: {
 			GButton,
-			Heading,
-			SwitchControl,
+			GHeading,
+			GSwitch,
 		},
 
 		data() {

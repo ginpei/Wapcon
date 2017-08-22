@@ -1,6 +1,6 @@
 <template lang="pug">
 	div.themes
-		Heading Themes
+		GHeading Themes
 		select(multiple)
 			option My Greate Theme
 			option My Wonderful Theme
@@ -34,12 +34,12 @@
 
 <script>
 	const GButton = require('../../components/form/GButton.vue')
-	const Heading = require('../../components/form/Heading.vue')
+	const GHeading = require('../../components/form/GHeading.vue')
 
 	module.exports = {
 		components: {
 			GButton,
-			Heading,
+			GHeading,
 		},
 
 		data() {
