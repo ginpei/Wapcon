@@ -88,8 +88,6 @@
 		.off
 			background-color: #eee
 			background-image: none
-			// box-shadow: 3px 2px 10px rgba(0,0,0,.2) inset, -3px 2px 10px rgba(0,0,0,.2) inset
-			// box-shadow: 5px 5px 10px rgba(0,0,0,.2) inset
 			color: #999
 			text-shadow: 1px 1px #fff
 
