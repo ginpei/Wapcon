@@ -4,7 +4,7 @@
 		span.label
 			span.on ON
 			span.separator
-				i.executingIndicator.fa.fa-spinner(aria-hidden="true")
+				i.executingIndicator.fa.fa-spinner.fa-pulse(aria-hidden="true")
 			span.off OFF
 </template>
 
@@ -81,7 +81,6 @@
 
 	.executing
 		.executingIndicator
-			animation: rotate 1s linear infinite
 			visibility: visible
 
 		.on,
@@ -90,12 +89,6 @@
 			background-image: none
 			color: #999
 			text-shadow: 1px 1px #fff
-
-	@keyframes rotate
-		0%
-			transform: rotate(0deg)
-		100%
-			transform: rotate(360deg)
 
 </style>
 
