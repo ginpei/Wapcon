@@ -16,6 +16,8 @@
 		overflow: hidden
 		user-select: none
 		width: 100px
+		-webkit-tap-highlight-color: transparent
+		tap-highlight-color: transparent
 
 	[type=checkbox]
 		display: none

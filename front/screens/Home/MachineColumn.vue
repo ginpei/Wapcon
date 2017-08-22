@@ -1,7 +1,9 @@
 <template lang="pug">
 	div.controller
 		GHeading Machine
+		div.spacer
 		GSwitch
+		div.spacer
 		div.settings
 			GIconButton(icon="cog")
 </template>
@@ -9,7 +11,7 @@
 <style lang="sass" scoped>
 	.controller
 		display: grid
-		grid-template-rows: 20px auto 50px
+		grid-template-rows: 20px 8px auto 8px 50px
 		padding: 8px
 
 	.heading

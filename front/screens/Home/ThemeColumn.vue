@@ -1,10 +1,12 @@
 <template lang="pug">
-	div.themes
-		GHeading Themes
+	div.container
+		GHeading.heading Themes
+		div.spacer
 		select(multiple)
 			option My Greate Theme
 			option My Wonderful Theme
 			option Samurai X
+		div.spacer
 		div.buttons
 			GIconButton(icon="plus")
 			GIconButton(icon="minus")
@@ -12,20 +14,17 @@
 </template>
 
 <style lang="sass" scoped>
-	.themes
+	.container
 		flex: 1
 		display: grid
-		grid-template-rows: 20px auto 50px
-		padding: 8px
+		grid-template-rows: 20px 8px auto 8px 50px
+		padding: 8px 0 8px 8px
 
-	.buttons > button
-		font-size: 14px
-		height: 50px
-		line-height: 14px
-		vertical-align: middle
-		width: 50px
+		select
+			width: 100%
 
-		&.folder
+	.buttons
+		.folder
 			float: right
 </style>
 
