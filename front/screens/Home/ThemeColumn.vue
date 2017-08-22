@@ -20,12 +20,8 @@
 		grid-template-rows: 20px 8px auto 8px 50px
 		padding: 8px 0 8px 8px
 
-		select
-			width: 100%
-
-	.buttons
-		.folder
-			float: right
+	.folder
+		float: right
 </style>
 
 <script>
