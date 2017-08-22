@@ -9,15 +9,15 @@
 
 <style lang="sass" scoped>
 	.switch
-		border: solid 1px #999
 		border-radius: 20px
+		border: solid 1px #999
 		display: inline-block
 		height: 40px
 		overflow: hidden
-		user-select: none
-		width: 100px
 		-webkit-tap-highlight-color: transparent
 		tap-highlight-color: transparent
+		user-select: none
+		width: 100px
 
 	[type=checkbox]
 		display: none
