@@ -5,7 +5,7 @@
 		GSwitch
 		div.spacer
 		div.settings
-			GIconButton(icon="cog")
+			GIconButton(title="Settings" icon="cog")
 </template>
 
 <style lang="sass" scoped>

@@ -8,9 +8,9 @@
 			option Samurai X
 		div.spacer
 		div.buttons
-			GIconButton(icon="plus")
-			GIconButton(icon="minus")
-			GIconButton.folder(icon="folder-open-o")
+			GIconButton(title="Add a folder" icon="plus")
+			GIconButton(title="Remove from this list" icon="minus")
+			GIconButton.folder(title="Open the folder" icon="folder-open-o")
 </template>
 
 <style lang="sass" scoped>

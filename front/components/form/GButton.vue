@@ -1,5 +1,5 @@
 <template lang="pug">
-	button
+	button(:title="title")
 		slot
 </template>
 
@@ -11,3 +11,11 @@
 		text-shadow: 1px 1px rgba(255, 255, 255, 0.5)
 		min-width: 50px
 </style>
+
+<script>
+	module.exports = {
+		props: [
+			'title',
+		],
+	}
+</script>
