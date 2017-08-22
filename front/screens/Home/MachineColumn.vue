@@ -44,10 +44,8 @@
 
 		methods: {
 			onClick({ on }) {
-				console.debug(this.machineOn, on);
+				// TODO implement
 				this.machineOn = on
-				console.debug('->', this.machineOn);
-
 				this.executingMachine = true
 				setTimeout(_ => this.executingMachine = false, 1000)
 			},
