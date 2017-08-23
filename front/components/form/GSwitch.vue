@@ -46,8 +46,8 @@
 		width: $height * 2
 
 	.on
-		background-color: #00f
-		background-image: linear-gradient(to bottom, hsl(214,90%,40%), hsl(214,90%,70%))
+		background-color: #090
+		background-image: linear-gradient(to bottom, hsl(120, 70%, 30%), hsl(120, 80%, 60%))
 		box-shadow: 3px 2px 10px rgba(0,0,0,.2) inset, -3px 2px 10px rgba(0,0,0,.2) inset
 		color: #fff
 		text-shadow: -1px -1px rgba(0,0,0,.3)
