@@ -1,7 +1,7 @@
 <template lang="pug">
 	BaseLayout.root
 		ThemeColumn
-		MachineColumn
+		MachineColumn(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
 </template>
 
 <style lang="sass" scoped>
@@ -25,12 +25,21 @@
 		data() {
 			return {
 				name: 'Wapcon',
+				executingMachine: false,
+				machineOn: false,
 			}
 		},
 
 		methods: {
-			work_onClick(event) {
-				this.$store.dispatch('volume/update')
+			onToggleMachine({ on }) {
+				if (this.executingMachine) {
+					return
+				}
+
+				// TODO implement
+				this.machineOn = on
+				this.executingMachine = true
+				setTimeout(_ => this.executingMachine = false, 1000)
 			},
 		},
 	}

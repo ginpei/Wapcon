@@ -2,7 +2,7 @@
 	div.controller
 		GHeading Machine
 		div.spacer
-		GSwitch(:on="machineOn" :executing="executingMachine" :onClick="onClick")
+		GSwitch(:on="machineOn" :executing="executingMachine" :onClick="onToggleMachine")
 		div.spacer
 		div.settings
 			GIconButton(title="Settings" icon="cog")
@@ -35,24 +35,18 @@
 			GSwitch,
 		},
 
-		data() {
-			return {
-				executingMachine: false,
-				machineOn: false,
-			}
-		},
+		props: [
+			'executingMachine',
+			'machineOn',
+			'onToggleMachine',
+		],
 
-		methods: {
-			onClick({ on }) {
-				if (this.executingMachine) {
-					return
-				}
+		// data() {
+		// 	return {
+		// 	}
+		// },
 
-				// TODO implement
-				this.machineOn = on
-				this.executingMachine = true
-				setTimeout(_ => this.executingMachine = false, 1000)
-			},
-		},
+		// methods: {
+		// },
 	}
 </script>
