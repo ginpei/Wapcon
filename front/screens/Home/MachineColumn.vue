@@ -44,6 +44,10 @@
 
 		methods: {
 			onClick({ on }) {
+				if (this.executingMachine) {
+					return
+				}
+
 				// TODO implement
 				this.machineOn = on
 				this.executingMachine = true
