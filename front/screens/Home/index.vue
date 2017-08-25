@@ -1,13 +1,20 @@
 <template lang="pug">
-	BaseLayout.root
-		ThemeColumn
-		MachineColumn(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
+	BaseLayout.row
+		ThemeColumn.item.main
+		MachineColumn.item.aside(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
 </template>
 
 <style lang="sass" scoped>
-	.root
+	.row
 		display: flex
 		height: 100%
+
+	.item.main
+		flex: 1
+		padding: 8px 0 8px 8px
+
+	.item.aside
+		padding: 8px
 </style>
 
 <script>

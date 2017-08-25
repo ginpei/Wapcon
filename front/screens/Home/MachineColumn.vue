@@ -12,7 +12,6 @@
 	.controller
 		display: grid
 		grid-template-rows: 20px 8px auto 8px 50px
-		padding: 8px
 
 	.heading
 		font-size: 16px
