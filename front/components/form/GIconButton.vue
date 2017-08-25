@@ -25,7 +25,6 @@
 
 		computed: {
 			classes() {
-				console.log(this);
 				return {
 					[`fa-${this.icon}`]: true,
 				}
