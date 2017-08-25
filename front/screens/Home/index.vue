@@ -15,6 +15,8 @@
 	const ThemeColumn = require('./ThemeColumn.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 
+	const { ipcRenderer } = window.electron
+
 	module.exports = {
 		components: {
 			BaseLayout,
@@ -30,16 +32,44 @@
 			}
 		},
 
+		created() {
+			this.f_onDockerStartDone = this.onDockerStartDone.bind(this)
+			ipcRenderer.on('docker-start.done', this.f_onDockerStartDone)
+			this.f_onDockerStartError = this.onDockerStartError.bind(this)
+			ipcRenderer.on('docker-start.error', this.f_onDockerStartError)
+		},
+
+		destroyed() {
+			ipcRenderer.removeListener('docker-start.done', this.f_onDockerStartDone)
+			ipcRenderer.removeListener('docker-start.error', this.f_onDockerStartError)
+		},
+
 		methods: {
 			onToggleMachine({ on }) {
 				if (this.executingMachine) {
 					return
 				}
 
-				// TODO implement
-				this.machineOn = on
 				this.executingMachine = true
-				setTimeout(_ => this.executingMachine = false, 1000)
+				ipcRenderer.send('docker-start')
+			},
+
+			onDockerStartDone(event, arg) {
+				this.executingMachine = false
+
+				if (arg.success) {
+					this.machineOn = arg.on
+				}
+
+				console.log(arg);
+			},
+
+			onDockerStartError(event, error) {
+				this.executingMachine = false
+
+				// console.error('ERROR', error)
+
+				// TODO handle error
 			},
 		},
 	}

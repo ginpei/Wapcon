@@ -2,6 +2,8 @@ const path = require('path');
 const url = require('url');
 const { app, BrowserWindow } = require('electron');
 
+const docker = require('./back/docker.js')
+
 let win;
 
 function createWindow() {
@@ -38,3 +40,5 @@ app.on('activate', ()=>{
 		createWindow();
 	}
 });
+
+docker.init()

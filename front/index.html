@@ -15,6 +15,7 @@
 		<div v-show="ready" id="app" style="display: none;"></div>
 		<script>
 			// window.spawn = require('child_process').spawn;
+			window.electron = require('electron');
 			window.shell = require('electron').shell;
 
 			document.addEventListener('click', (event)=>{
