@@ -1,6 +1,7 @@
 <template lang="pug">
 	BaseLayout.row
-		ThemeColumn.item.main
+		// ThemeColumn.item.main
+		DockerColumn.item.main
 		MachineColumn.item.aside(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
 </template>
 
@@ -22,12 +23,15 @@
 	const ThemeColumn = require('./ThemeColumn.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 
+	const DockerColumn = require('./temp-DockerColumn.vue')
+
 	const { ipcRenderer } = window.electron
 
 	module.exports = {
 		components: {
 			BaseLayout,
 			ThemeColumn,
+			DockerColumn,
 			MachineColumn,
 		},
 

@@ -1,14 +1,6 @@
 const spawn = require('child_process').spawn
 const { ipcMain } = require('electron');
 
-module.exports = {
-	init() {
-		ipcMain.on('docker-start', (event, arg) => {
-			startDocker(event, arg)
-		})
-	},
-}
-
 let on = false  // TODO remove me
 
 function startDocker(event, arg) {
@@ -23,15 +15,11 @@ function startDocker(event, arg) {
 			event.sender.send('docker-start.done', { on, success })
 		})
 		.catch(error => {
-			console.error(error);
-			event.sender.send('docker-start.error', {
-				message: error.message,
-				stack: error.stack,
-			})
+			event.sender.send('docker-start.error', error)
 		})
 }
 
-function run(command) {
+function run(command, callback = function(){}) {
 	console.log('$', command);
 	return new Promise((resolve, reject) => {
 		const outputs = []
@@ -40,25 +28,68 @@ function run(command) {
 		const cmd = spawn(entry, commandArgs)
 
 		cmd.stdout.on('data', data => {
-			outputs.push({
+			const output = {
 				text: data.toString(),
 				type: 'stdout',
-			})
+			}
+			outputs.push(output)
+			callback(output)
 		})
 
 		cmd.stderr.on('data', data => {
-			outputs.push({
-				text: data.toString(),
+			const text = data.toString()
+			// console.log('ERR', text);
+			const output = {
+				text: text,
 				type: 'stderr',
-			})
+			}
+			outputs.push(output)
+			callback(output)
 		})
 
 		cmd.on('error', error => {
-			reject(error)
+			// error object cannot be passed to the renderer thread
+			reject({
+				message: error.message,
+				original: error,  // will be empty object `{}`
+				stack: error.stack,
+			})
 		})
 
 		cmd.on('close', code => {
 			resolve({ code, outputs })
 		})
 	})
+}
+
+function startDb(event, arg) {
+	const command = 'docker run --env-file ./.env --name wapcon_mysql mysql:5.7'
+	const rxMessage = / \[Note\] mysqld: ready for connections\.\n/
+
+	run(command, (output) => {
+		if (output.type === 'stderr' && rxMessage.test(output.text)) {
+			event.sender.send('db-start.done')
+		}
+	})
+		.catch(error => {
+			event.sender.send('db-start.error', error)
+		})
+}
+
+function stopDb(event, arg) {
+	run('docker stop wapcon_mysql')
+		.then(_ => run('docker rm wapcon_mysql'))
+		.then(result => event.sender.send('db-start.done', result))
+		.catch(error => event.sender.send('db-start.error', error))
+}
+
+module.exports = {
+	init() {
+		ipcMain.on('docker-start', startDocker)
+		ipcMain.on('db-start', startDb)
+		ipcMain.on('db-stop', stopDb)
+	},
+
+	startDb,
+	stopDb,
 }

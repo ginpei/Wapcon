@@ -1,5 +1,5 @@
 <template lang="pug">
-	button(:title="title")
+	button(:title="title" @click="button_onClick")
 		slot
 </template>
 
@@ -16,6 +16,15 @@
 	module.exports = {
 		props: [
 			'title',
+			'onPress',
 		],
+
+		methods: {
+			button_onClick(event) {
+				if (this.onPress) {
+					this.onPress(event)
+				}
+			}
+		},
 	}
 </script>
