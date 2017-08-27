@@ -1,21 +1,39 @@
 const spawn = require('child_process').spawn
 const { ipcMain } = require('electron');
 
-let on = false  // TODO remove me
-
 function startDocker(event, arg) {
-	on = !on
-
-	return run('sleep 1')
-		.then(result => {
-			const success = result.code === 0
+	Promise.all([
+		startDb(),
+	])
+		.then(results => {
+			const on = true
+			const success = results.every(v => v.code === 0)
 			if (!success) {
-				console.log(result.code, result)
+				console.log('startDocker: failed', results)
 			}
 			event.sender.send('docker-start.done', { on, success })
 		})
 		.catch(error => {
+			console.error(error);
 			event.sender.send('docker-start.error', error)
+		})
+}
+
+function stopDocker(event, arg) {
+	Promise.all([
+		stopDb(),
+	])
+		.then(results => {
+			const on = false
+			const success = results.every(v => v.code === 0)
+			if (!success) {
+				console.log('stopDocker: failed', results)
+			}
+			event.sender.send('docker-stop.done', { on, success })
+		})
+		.catch(error => {
+			console.error(error);
+			event.sender.send('docker-stop.error', error)
 		})
 }
 
@@ -62,34 +80,36 @@ function run(command, callback = function(){}) {
 	})
 }
 
+/**
+ * @returns {Promise}
+ */
 function startDb(event, arg) {
 	const command = 'docker run --env-file ./.env --name wapcon_mysql mysql:5.7'
 	const rxMessage = / \[Note\] mysqld: ready for connections\.\n/
 
-	run(command, (output) => {
-		if (output.type === 'stderr' && rxMessage.test(output.text)) {
-			event.sender.send('db-start.done')
-		}
-	})
-		.catch(error => {
-			event.sender.send('db-start.error', error)
+	return new Promise((resolve, reject) => {
+		run(command, (output) => {
+			if (output.type === 'stderr' && rxMessage.test(output.text)) {
+				resolve({ code: 0 })
+			}
 		})
+			.catch(reject)
+	})
 }
 
+/**
+ * @returns {Promise}
+ */
 function stopDb(event, arg) {
-	run('docker stop wapcon_mysql')
+	return run('docker stop wapcon_mysql')
 		.then(_ => run('docker rm wapcon_mysql'))
-		.then(result => event.sender.send('db-start.done', result))
-		.catch(error => event.sender.send('db-start.error', error))
 }
 
 module.exports = {
 	init() {
 		ipcMain.on('docker-start', startDocker)
+		ipcMain.on('docker-stop', stopDocker)
 		ipcMain.on('db-start', startDb)
 		ipcMain.on('db-stop', stopDb)
 	},
-
-	startDb,
-	stopDb,
 }

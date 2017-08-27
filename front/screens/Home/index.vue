@@ -1,7 +1,6 @@
 <template lang="pug">
 	BaseLayout.row
-		// ThemeColumn.item.main
-		DockerColumn.item.main
+		ThemeColumn.item.main
 		MachineColumn.item.aside(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
 </template>
 
@@ -23,15 +22,12 @@
 	const ThemeColumn = require('./ThemeColumn.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 
-	const DockerColumn = require('./temp-DockerColumn.vue')
-
 	const { ipcRenderer } = window.electron
 
 	module.exports = {
 		components: {
 			BaseLayout,
 			ThemeColumn,
-			DockerColumn,
 			MachineColumn,
 		},
 
@@ -44,15 +40,22 @@
 		},
 
 		created() {
-			this.f_onDockerStartDone = this.onDockerStartDone.bind(this)
-			ipcRenderer.on('docker-start.done', this.f_onDockerStartDone)
-			this.f_onDockerStartError = this.onDockerStartError.bind(this)
-			ipcRenderer.on('docker-start.error', this.f_onDockerStartError)
+			this._ipcListeners = [
+				['docker-start.done', this.onDockerStartDone],
+				['docker-start.error', this.onDockerStartError],
+				['docker-stop.done', this.onDockerStopDone],
+				['docker-stop.error', this.onDockerStopError],
+			].map(([channel, listener]) => {
+				const f = listener.bind(this)
+				ipcRenderer.on(channel, f)
+				return [channel, f]
+			})
 		},
 
 		destroyed() {
-			ipcRenderer.removeListener('docker-start.done', this.f_onDockerStartDone)
-			ipcRenderer.removeListener('docker-start.error', this.f_onDockerStartError)
+			this._ipcListeners.forEach(([channel, listener]) => {
+				ipcRenderer.removeListener(channel, listener)
+			})
 		},
 
 		methods: {
@@ -62,7 +65,12 @@
 				}
 
 				this.executingMachine = true
-				ipcRenderer.send('docker-start')
+				if (on) {
+					ipcRenderer.send('docker-start')
+				}
+				else {
+					ipcRenderer.send('docker-stop')
+				}
 			},
 
 			onDockerStartDone(event, arg) {
@@ -71,14 +79,36 @@
 				if (arg.success) {
 					this.machineOn = arg.on
 				}
+				else {
+					// TODO
+				}
 
-				console.log(arg);
+				console.log('#onDockerStartDone', arg);
 			},
 
 			onDockerStartError(event, error) {
 				this.executingMachine = false
+				console.error('ERROR', error)
 
-				// console.error('ERROR', error)
+				// TODO handle error
+			},
+
+			onDockerStopDone(event, arg) {
+				this.executingMachine = false
+
+				if (arg.success) {
+					this.machineOn = arg.on
+				}
+				else {
+					// TODO
+				}
+
+				console.log('#onDockerStopDone', arg);
+			},
+
+			onDockerStopError(event, error) {
+				this.executingMachine = false
+				console.error('ERROR', error)
 
 				// TODO handle error
 			},
