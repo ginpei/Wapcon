@@ -53,13 +53,13 @@
 		methods: {
 			startDb(event) {
 				this.handlingDb = true
-				console.log('start db');
+				console.log('start db')
 				ipcRenderer.send('db-start')
 			},
 
 			stopDb(event) {
 				this.handlingDb = true
-				console.log('stop db');
+				console.log('stop db')
 				ipcRenderer.send('db-stop')
 			},
 

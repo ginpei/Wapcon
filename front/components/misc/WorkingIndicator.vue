@@ -11,8 +11,8 @@ module.exports = {
 		classes() {
 			return {
 				loading: this.show,
-			};
+			}
 		},
 	},
-};
+}
 </script>

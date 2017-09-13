@@ -83,7 +83,7 @@
 					// TODO
 				}
 
-				console.log('#onDockerStartDone', arg);
+				console.log('#onDockerStartDone', arg)
 			},
 
 			onDockerStartError(event, error) {
@@ -103,7 +103,7 @@
 					// TODO
 				}
 
-				console.log('#onDockerStopDone', arg);
+				console.log('#onDockerStopDone', arg)
 			},
 
 			onDockerStopError(event, error) {

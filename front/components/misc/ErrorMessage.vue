@@ -18,14 +18,14 @@ module.exports = {
 	computed: {
 		url() {
 			// remove long word
-			const threshold = 10;
+			const threshold = 10
 			const query = this.message
 				.split(' ')
-				.filter(d=>d.length<threshold)
-				.join(' ');
+				.filter(d => d.length<threshold)
+				.join(' ')
 
-			return `https://www.google.com/search?q=${query}`;
+			return `https://www.google.com/search?q=${query}`
 		},
 	},
-};
+}
 </script>

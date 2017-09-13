@@ -17,9 +17,9 @@ module.exports = {
 		"arrow-spacing": [
 			"error",
 			{
-				"before": false,
-				"after": false
-			}
+				"before": true,
+				"after": true,
+			},
 		],
 		"block-scoped-var": "error",
 		"block-spacing": "error",
@@ -248,7 +248,7 @@ module.exports = {
 		"rest-spread-spacing": "error",
 		"semi": [
 			"error",
-			"always"
+			"never"
 		],
 		"semi-spacing": "error",
 		"sort-imports": "error",

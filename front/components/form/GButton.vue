@@ -24,7 +24,7 @@
 				if (this.onPress) {
 					this.onPress(event)
 				}
-			}
+			},
 		},
 	}
 </script>

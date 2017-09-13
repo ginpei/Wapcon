@@ -7,19 +7,19 @@
 </style>
 
 <script>
-const routingAnimation = require('./routing-animation.js').get();
+const routingAnimation = require('./routing-animation.js').get()
 
 module.exports = {
 	mounted() {
-		routingAnimation.start();
+		routingAnimation.start()
 	},
 
 	updated() {
-		routingAnimation.animateNext();
+		routingAnimation.animateNext()
 	},
 
 	unmounted() {
-		routingAnimation.stop();
+		routingAnimation.stop()
 	},
-};
+}
 </script>
