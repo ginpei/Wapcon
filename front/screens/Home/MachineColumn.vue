@@ -1,9 +1,7 @@
 <template lang="pug">
 	div.controller
 		GHeading Machine
-		div.spacer
 		GSwitch(:on="machineOn" :executing="executingMachine" :onClick="onToggleMachine")
-		div.spacer
 		div.settings
 			GIconButton(title="Settings" icon="cog")
 </template>
@@ -11,7 +9,8 @@
 <style lang="sass" scoped>
 	.controller
 		display: grid
-		grid-template-rows: 20px 8px auto 8px 50px
+		grid-template-rows: 20px auto 50px
+		grid-gap: 8px
 
 	.heading
 		font-size: 16px
