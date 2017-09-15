@@ -1,10 +1,8 @@
 <template lang="pug">
 	div.container
-		GHeading.heading Themes
+		GHeading.heading Themes {{$store.state.preferences.themeList.length}}
 		select(multiple)
-			option My Greate Theme
-			option My Wonderful Theme
-			option Samurai X
+			option(v-for="v in $store.state.preferences.themeList") {{v.name}}
 		div.buttons
 			GIconButton(title="Add a folder" icon="plus")
 			GIconButton(title="Remove from this list" icon="minus")

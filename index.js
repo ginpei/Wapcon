@@ -3,6 +3,7 @@ const url = require('url');
 const { app, BrowserWindow } = require('electron');
 
 const docker = require('./back/docker.js')
+const preference = require('./back/preference.js')
 
 let win;
 
@@ -42,3 +43,4 @@ app.on('activate', ()=>{
 });
 
 docker.init()
+preference.init()

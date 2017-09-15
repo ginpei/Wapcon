@@ -21,7 +21,6 @@
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 	const ThemeColumn = require('./ThemeColumn.vue')
-	const bridge = require('../../lib/bridge.js')
 
 	module.exports = {
 		components: {
@@ -38,6 +37,7 @@
 
 		created() {
 			this.updateMachineStatus()
+			this.$store.dispatch('preferences/load')
 		},
 
 		destroyed() {
