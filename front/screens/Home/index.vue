@@ -1,7 +1,7 @@
 <template lang="pug">
 	BaseLayout.row
 		ThemeColumn.item.main
-		MachineColumn.item.aside(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
+		MachineColumn.item.aside(:executingMachine="$store.getters['machine/working']" :machineOn="$store.state.machine.running" :onToggleMachine="onToggleMachine")
 </template>
 
 <style lang="sass" scoped>
@@ -47,31 +47,20 @@
 
 		methods: {
 			updateMachineStatus() {
-				console.log('checking...')
-				this.executingMachine = true
-				bridge('checkMachinStatus')
-					.then(status => {
-						this.executingMachine = false
-						this.machineOn = status.running
-					})
+				this.$store.dispatch('machine/updateStatus')
 			},
 
 			onToggleMachine({ on }) {
-				if (this.executingMachine) {
+				if (this.$store.getters['machine/working']) {
 					return
 				}
 
-				this.machineOn = on
-
-				this.executingMachine = true
-				console.log('turnning ' + (on ? 'on' : 'off') + '...', on)
-				const p = on ? bridge('startMachine') : bridge('stopMachine')
-				p
-					.then(result => {
-						this.executingMachine = false
-						console.log('done', result)
-						this.updateMachineStatus()
-					})
+				if (on) {
+					this.$store.dispatch('machine/start')
+				}
+				else {
+					this.$store.dispatch('machine/stop')
+				}
 			},
 		},
 	}

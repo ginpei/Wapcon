@@ -2,12 +2,12 @@
 
 const Vue = require('vue');
 const Vuex = require('vuex');
-const volume = require('./modules/volume.js');
+const machine = require('./modules/machine.js');
 
 Vue.use(Vuex);
 
 module.exports = new Vuex.Store({
 	modules: {
-		volume,
+		machine,
 	},
 });
