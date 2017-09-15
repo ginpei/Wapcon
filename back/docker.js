@@ -1,115 +1,121 @@
 const spawn = require('child_process').spawn
 const { ipcMain } = require('electron');
 
-function startDocker(event, arg) {
-	Promise.all([
-		startDb(),
-	])
-		.then(results => {
-			const on = true
-			const success = results.every(v => v.code === 0)
-			if (!success) {
-				console.log('startDocker: failed', results)
+const run = require('./lib/run.js')
+
+function checkMachinStatus(event, arg) {
+	return run('docker container ls --format {{.Names}} --filter name=wapcon-')
+		.then(({ code, result }) => {
+			const status = {}
+
+			if (result.length > 0) {
+				const firstOutput = result.find(v => v.type === 'stdout')
+				if (firstOutput) {
+					const lines = firstOutput.text.split('\n')
+					status.db = lines.some(v => v === 'wapcon-db')
+					status.php = lines.some(v => v === 'wapcon-php')
+					status.www = lines.some(v => v === 'wapcon-www')
+				}
 			}
-			event.sender.send('docker-start.done', { on, success })
+
+			status.running = Boolean(status.db && status.php && status.www)
+			return status
+		})
+}
+
+function startDocker(event, arg) {
+	const results = {}
+	return startDb()
+		.then(result => {
+			results.db = result
+			return startPhp()
+		})
+		.then(result => {
+			results.php = result
+			return startWww()
+		})
+		.then(result => {
+			results.www = result
+			return results
 		})
 		.catch(error => {
-			console.error(error);
-			event.sender.send('docker-start.error', error)
+			results.error = error
+			return results
 		})
 }
 
 function stopDocker(event, arg) {
-	Promise.all([
+	return Promise.all([
 		stopDb(),
+		stopPhp(),
+		stopWww(),
 	])
-		.then(results => {
-			const on = false
-			const success = results.every(v => v.code === 0)
-			if (!success) {
-				console.log('stopDocker: failed', results)
-			}
-			event.sender.send('docker-stop.done', { on, success })
-		})
-		.catch(error => {
-			console.error(error);
-			event.sender.send('docker-stop.error', error)
-		})
 }
 
-function run(command, callback = function(){}) {
-	console.log('$', command);
-	return new Promise((resolve, reject) => {
-		const outputs = []
-
-		const [entry, ...commandArgs] = command.split(' ')
-		const cmd = spawn(entry, commandArgs)
-
-		cmd.stdout.on('data', data => {
-			const output = {
-				text: data.toString(),
-				type: 'stdout',
-			}
-			outputs.push(output)
-			callback(output)
-		})
-
-		cmd.stderr.on('data', data => {
-			const text = data.toString()
-			// console.log('ERR', text);
-			const output = {
-				text: text,
-				type: 'stderr',
-			}
-			outputs.push(output)
-			callback(output)
-		})
-
-		cmd.on('error', error => {
-			// error object cannot be passed to the renderer thread
-			reject({
-				message: error.message,
-				original: error,  // will be empty object `{}`
-				stack: error.stack,
-			})
-		})
-
-		cmd.on('close', code => {
-			resolve({ code, outputs })
-		})
-	})
+function startDb() {
+	const command = [
+		'docker run',
+		'-d',
+		'--rm',
+		'--name wapcon-db',
+		'--env-file ./machine-env',
+		'ginpei/wapcon-db',
+	].join(' ')
+	return run(command)
 }
 
-/**
- * @returns {Promise}
- */
-function startDb(event, arg) {
-	const command = 'docker run --env-file ./.env --name wapcon_mysql mysql:5.7'
-	const rxMessage = / \[Note\] mysqld: ready for connections\.\n/
-
-	return new Promise((resolve, reject) => {
-		run(command, (output) => {
-			if (output.type === 'stderr' && rxMessage.test(output.text)) {
-				resolve({ code: 0 })
-			}
-		})
-			.catch(reject)
-	})
+function stopDb() {
+	const command = 'docker stop wapcon-db'
+	return run(command)
 }
 
-/**
- * @returns {Promise}
- */
-function stopDb(event, arg) {
-	return run('docker stop wapcon_mysql')
-		.then(_ => run('docker rm wapcon_mysql'))
+function startPhp() {
+	const command = [
+		'docker run',
+		'-d',
+		'--rm',
+		'--name wapcon-php',
+		'--link wapcon-db:db',
+		'--env-file ./machine-env',
+		'-p 9000:9000',
+		'-v C:/Users/ginpei/projects/tmp:/var/www/html',
+		'ginpei/wapcon-php',
+	].join(' ')
+	return run(command)
+}
+
+function stopPhp() {
+	const command = 'docker stop wapcon-php'
+	return run(command)
+}
+
+function startWww() {
+	const command = [
+		'docker run',
+		'-d',
+		'--rm',
+		'--name wapcon-www',
+		'--link wapcon-php:php',
+		'-p 80:80',
+		'-v C:/Users/ginpei/projects/tmp:/var/www/html',
+		'ginpei/wapcon-www',
+	].join(' ')
+	return run(command)
+}
+
+function stopWww() {
+	const command = 'docker stop wapcon-www'
+	return run(command)
 }
 
 module.exports = {
 	init() {
-		ipcMain.on('docker-start', startDocker)
-		ipcMain.on('docker-stop', stopDocker)
-		ipcMain.on('db-start', startDb)
-		ipcMain.on('db-stop', stopDb)
+		// ipcMain.on('docker-start', startDocker)
+		// ipcMain.on('docker-stop', stopDocker)
+		// ipcMain.on('db-start', startDb)
+		// ipcMain.on('db-stop', stopDb)
 	},
+
+	checkMachinStatus,
+	startDocker, stopDocker,
 }
