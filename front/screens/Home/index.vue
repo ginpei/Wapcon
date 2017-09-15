@@ -2,6 +2,13 @@
 	BaseLayout.row
 		ThemeColumn.item.main
 		MachineColumn.item.aside(:executingMachine="executingMachine" :machineOn="machineOn" :onToggleMachine="onToggleMachine")
+		div
+			div
+				button(@click="sleep0" style="height:50px") Error
+			div
+				button(@click="sleep1" style="height:50px") Sleep 1 sec
+			div
+				button(@click="sleep3" style="height:50px") Sleep 3 sec
 </template>
 
 <style lang="sass" scoped>
@@ -22,6 +29,7 @@
 	const ThemeColumn = require('./ThemeColumn.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 
+	const bridge = require('../../lib/bridge.js')
 	const { ipcRenderer } = window.electron
 
 	module.exports = {
@@ -112,6 +120,20 @@
 
 				// TODO handle error
 			},
+
+			sleep0(event) {
+				bridge('sleep', { delay: 0 })
+					.catch(error => console.error('error', error))
+			},
+			sleep1(event) {
+				bridge('sleep', { delay: 1000 })
+					.then(result => console.log('done', result))
+			},
+			sleep3(event) {
+				bridge('sleep', { delay: 3000 })
+					.then(result => console.log('done', result))
+			},
+
 		},
 	}
 </script>

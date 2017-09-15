@@ -42,3 +42,16 @@ app.on('activate', ()=>{
 });
 
 docker.init()
+
+
+
+const bridge = require('./back/lib/bridge.js')
+bridge('sleep', (event, arg) => {
+	return new Promise((resolve, reject) => {
+		if (arg.delay > 0) {
+			setTimeout(_ => resolve(arg), arg.delay)
+		} else {
+			throw new Error('Hello ' + arg.delay)
+		}
+	})
+})
