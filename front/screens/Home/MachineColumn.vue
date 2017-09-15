@@ -2,6 +2,8 @@
 	div.controller
 		GHeading Machine
 		GSwitch(:on="running" :executing="working" :onClick="onToggleMachine")
+		div
+			a(:class="linkClasses" href="http://localhost") http://localhost
 		div.settings
 			GIconButton(title="Settings" icon="cog")
 </template>
@@ -43,6 +45,14 @@
 		// 	return {
 		// 	}
 		// },
+
+		computed: {
+			linkClasses() {
+				return {
+					disabled: !this.running,
+				}
+			},
+		},
 
 		// methods: {
 		// },

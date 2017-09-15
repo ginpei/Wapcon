@@ -12,3 +12,7 @@ body,
 input {
 	font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Segoe UI",SegoeUI,"Helvetica","Arial",sans-serif;
 }
+
+a.disabled {
+	color: #999;
+}
