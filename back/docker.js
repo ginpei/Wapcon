@@ -1,3 +1,4 @@
+const path = require('path')
 const spawn = require('child_process').spawn
 
 const bridge = require('./lib/bridge.js')
@@ -23,16 +24,17 @@ function checkMachinStatus(event, arg) {
 		})
 }
 
-function startMachine(event, arg) {
+function startMachine(event, preferences) {
+	const arg = createArgFromPreferences(preferences)
 	const results = {}
-	return startDb()
+	return startDb(arg)
 		.then(result => {
 			results.db = result
-			return startPhp()
+			return startPhp(arg)
 		})
 		.then(result => {
 			results.php = result
-			return startWww()
+			return startWww(arg)
 		})
 		.then(result => {
 			results.www = result
@@ -44,6 +46,19 @@ function startMachine(event, arg) {
 		})
 }
 
+function createArgFromPreferences(preferences) {
+	const arg = {
+		databasePath: path.resolve(preferences.databasePath),
+		wordpressPath: path.resolve(preferences.wordpressPath),
+	}
+	arg.themeList = preferences.themeList.map(v => {
+		const themePath = v.path || '.'
+		return Object.assign({}, v, { path: path.resolve(themePath) })
+	})
+
+	return arg
+}
+
 function stopMachine(event, arg) {
 	console.log('stopMachine')
 	return Promise.all([
@@ -53,7 +68,8 @@ function stopMachine(event, arg) {
 	])
 }
 
-function startDb() {
+function startDb({ dbPath }) {
+	// TODO set the volume outside
 	const command = [
 		'docker run',
 		'-d',
@@ -70,7 +86,7 @@ function stopDb() {
 	return run(command)
 }
 
-function startPhp() {
+function startPhp({ wordpressPath }) {
 	const command = [
 		'docker run',
 		'-d',
@@ -79,7 +95,7 @@ function startPhp() {
 		'--link wapcon-db:db',
 		'--env-file ./machine-env',
 		'-p 9000:9000',
-		'-v C:/Users/ginpei/projects/tmp:/var/www/html',
+		`-v ${wordpressPath}:/var/www/html`,
 		'ginpei/wapcon-php',
 	].join(' ')
 	return run(command)
@@ -90,7 +106,7 @@ function stopPhp() {
 	return run(command)
 }
 
-function startWww() {
+function startWww({ wordpressPath }) {
 	const command = [
 		'docker run',
 		'-d',
@@ -98,7 +114,7 @@ function startWww() {
 		'--name wapcon-www',
 		'--link wapcon-php:php',
 		'-p 80:80',
-		'-v C:/Users/ginpei/projects/tmp:/var/www/html',
+		`-v ${wordpressPath}:/var/www/html`,
 		'ginpei/wapcon-www',
 	].join(' ')
 	return run(command)

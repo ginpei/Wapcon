@@ -38,10 +38,10 @@ module.exports = {
 				})
 		},
 
-		start({ commit, dispatch }) {
+		start({ rootState, commit, dispatch }) {
 			commit('START_WORKING');
 			commit('SET_RUNNING', { running: true });
-			bridge('startMachine')
+			bridge('startMachine', rootState.preferences)
 				.then(status => {
 					commit('FINISH_WORKING');
 					dispatch('updateStatus')
