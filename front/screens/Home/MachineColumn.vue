@@ -1,7 +1,7 @@
 <template lang="pug">
 	div.controller
 		GHeading Machine
-		GSwitch(:on="machineOn" :executing="executingMachine" :onClick="onToggleMachine")
+		GSwitch(:on="running" :executing="working" :onClick="onToggleMachine")
 		div.settings
 			GIconButton(title="Settings" icon="cog")
 </template>
@@ -34,8 +34,8 @@
 		},
 
 		props: [
-			'executingMachine',
-			'machineOn',
+			'working',
+			'running',
 			'onToggleMachine',
 		],
 

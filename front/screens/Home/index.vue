@@ -1,7 +1,7 @@
 <template lang="pug">
 	BaseLayout.row
 		ThemeColumn.item.main
-		MachineColumn.item.aside(:executingMachine="$store.getters['machine/working']" :machineOn="$store.state.machine.running" :onToggleMachine="onToggleMachine")
+		MachineColumn.item.aside(:working="$store.getters['machine/working']" :running="$store.state.machine.running" :onToggleMachine="onToggleMachine")
 </template>
 
 <style lang="sass" scoped>
@@ -33,8 +33,6 @@
 		data() {
 			return {
 				name: 'Wapcon',
-				executingMachine: false,
-				machineOn: false,
 			}
 		},
 
