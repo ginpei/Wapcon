@@ -19,8 +19,8 @@
 
 <script>
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
-	const ThemeColumn = require('./ThemeColumn.vue')
 	const MachineColumn = require('./MachineColumn.vue')
+	const ThemeColumn = require('./ThemeColumn.vue')
 
 	module.exports = {
 		components: {
