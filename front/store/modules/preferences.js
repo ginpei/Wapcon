@@ -1,17 +1,5 @@
 const bridge = require('../../lib/bridge.js')
 
-const defaultData = {
-	database: {
-		path: '',
-	},
-	theme: {
-		list: [],
-	},
-	wordpress: {
-		path: '',
-	},
-}
-
 module.exports = {
 	namespaced: true,
 
@@ -55,10 +43,6 @@ module.exports = {
 		},
 
 		SET_DATA(state, { data }) {
-			if (!data) {
-				data = defaultData
-			}
-
 			state.databasePath = data.database.path
 			state.themeList = data.theme.list
 			state.wordpressPath = data.wordpress.path

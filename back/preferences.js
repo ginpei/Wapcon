@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const bridge = require('./lib/bridge.js')
+const defaultData = require('./defaultPreferences.json')
 
 const path = '../user/preferences.json'
 const options = { encoding: 'utf8' }
@@ -18,7 +19,7 @@ function load() {
 	return new Promise((resolve, reject) => {
 		fs.readFile(path, options, (err, json) => {
 			if (err.message.startsWith('ENOENT: ')) {
-				resolve(null)
+				resolve(defaultData)
 				return
 			}
 			else if (err) {

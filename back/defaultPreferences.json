@@ -1,0 +1,13 @@
+{
+  "database": {
+    "path": "user/db"
+  },
+  "theme": {
+    "list": [
+			{ "name": "hehehe" }
+		]
+  },
+  "wordpress": {
+    "path": "user/wordpress"
+  }
+}
