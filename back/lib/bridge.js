@@ -9,7 +9,6 @@ module.exports = function(channel, callback) {
 		if (result instanceof Promise) {
 			result
 				.then(result => {
-					console.log('# done', bridge$id, result)
 					event.sender.send(channel, { bridge$id, result })
 				})
 				.catch(error => {

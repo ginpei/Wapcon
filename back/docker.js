@@ -1,6 +1,6 @@
 const spawn = require('child_process').spawn
-const { ipcMain } = require('electron');
 
+const bridge = require('./lib/bridge.js')
 const run = require('./lib/run.js')
 
 function checkMachinStatus(event, arg) {
@@ -23,7 +23,7 @@ function checkMachinStatus(event, arg) {
 		})
 }
 
-function startDocker(event, arg) {
+function startMachine(event, arg) {
 	const results = {}
 	return startDb()
 		.then(result => {
@@ -44,7 +44,8 @@ function startDocker(event, arg) {
 		})
 }
 
-function stopDocker(event, arg) {
+function stopMachine(event, arg) {
+	console.log('stopMachine')
 	return Promise.all([
 		stopDb(),
 		stopPhp(),
@@ -110,12 +111,8 @@ function stopWww() {
 
 module.exports = {
 	init() {
-		// ipcMain.on('docker-start', startDocker)
-		// ipcMain.on('docker-stop', stopDocker)
-		// ipcMain.on('db-start', startDb)
-		// ipcMain.on('db-stop', stopDb)
+		bridge('checkMachinStatus', checkMachinStatus)
+		bridge('startMachine', startMachine)
+		bridge('stopMachine', stopMachine)
 	},
-
-	checkMachinStatus,
-	startDocker, stopDocker,
 }

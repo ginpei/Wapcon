@@ -21,6 +21,7 @@
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 	const ThemeColumn = require('./ThemeColumn.vue')
+	const bridge = require('../../lib/bridge.js')
 
 	module.exports = {
 		components: {
@@ -38,77 +39,39 @@
 		},
 
 		created() {
-			this._ipcListeners = [
-				['docker-start.done', this.onDockerStartDone],
-				['docker-start.error', this.onDockerStartError],
-				['docker-stop.done', this.onDockerStopDone],
-				['docker-stop.error', this.onDockerStopError],
-			].map(([channel, listener]) => {
-				const f = listener.bind(this)
-				ipcRenderer.on(channel, f)
-				return [channel, f]
-			})
+			this.updateMachineStatus()
 		},
 
 		destroyed() {
-			this._ipcListeners.forEach(([channel, listener]) => {
-				ipcRenderer.removeListener(channel, listener)
-			})
 		},
 
 		methods: {
+			updateMachineStatus() {
+				console.log('checking...')
+				this.executingMachine = true
+				bridge('checkMachinStatus')
+					.then(status => {
+						this.executingMachine = false
+						this.machineOn = status.running
+					})
+			},
+
 			onToggleMachine({ on }) {
 				if (this.executingMachine) {
 					return
 				}
 
+				this.machineOn = on
+
 				this.executingMachine = true
-				if (on) {
-					ipcRenderer.send('docker-start')
-				}
-				else {
-					ipcRenderer.send('docker-stop')
-				}
-			},
-
-			onDockerStartDone(event, arg) {
-				this.executingMachine = false
-
-				if (arg.success) {
-					this.machineOn = arg.on
-				}
-				else {
-					// TODO
-				}
-
-				console.log('#onDockerStartDone', arg)
-			},
-
-			onDockerStartError(event, error) {
-				this.executingMachine = false
-				console.error('ERROR', error)
-
-				// TODO handle error
-			},
-
-			onDockerStopDone(event, arg) {
-				this.executingMachine = false
-
-				if (arg.success) {
-					this.machineOn = arg.on
-				}
-				else {
-					// TODO
-				}
-
-				console.log('#onDockerStopDone', arg)
-			},
-
-			onDockerStopError(event, error) {
-				this.executingMachine = false
-				console.error('ERROR', error)
-
-				// TODO handle error
+				console.log('turnning ' + (on ? 'on' : 'off') + '...', on)
+				const p = on ? bridge('startMachine') : bridge('stopMachine')
+				p
+					.then(result => {
+						this.executingMachine = false
+						console.log('done', result)
+						this.updateMachineStatus()
+					})
 			},
 		},
 	}
