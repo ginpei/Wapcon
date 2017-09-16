@@ -22,6 +22,9 @@
 	.buttonGroup
 		margin-right: 8px
 
+		&:last-child
+			margin-right: 0
+
 	.danger
 		float: right
 </style>
