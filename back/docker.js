@@ -52,6 +52,9 @@ function createArgFromPreferences(preferences) {
 		wordpressPath: path.resolve(preferences.wordpressPath),
 	}
 
+	// TODO remove old volume directories;
+	// empty directories are created and won't be removed
+	// (e.g. ~/mywp/wp-content/themes/wapcon-123)
 	arg.themeVolumeOptions = preferences.themeList.map((v, i) => {
 		const hostPath = path.resolve(v.path)  // TODO validate
 		const containerPath = `/var/www/html/wp-content/themes/wapcon-${i}`  // TODO check what if change current theme's order
