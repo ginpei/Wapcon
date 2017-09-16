@@ -40,9 +40,6 @@
 			this.$store.dispatch('preferences/load')
 		},
 
-		destroyed() {
-		},
-
 		methods: {
 			updateMachineStatus() {
 				this.$store.dispatch('machine/updateStatus')
