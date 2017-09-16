@@ -10,5 +10,12 @@ module.exports = {
 				resolve(result)
 			})
 		})
+
+		bridge('showMessageBox', (event, options) => {
+			return new Promise((resolve, reject) => {
+				const result = dialog.showMessageBox(options)
+				resolve(result)
+			})
+		})
 	},
 }

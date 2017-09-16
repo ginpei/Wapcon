@@ -50,6 +50,10 @@ module.exports = {
 			state.wordpressPath = data.wordpress.path
 		},
 
+		SET_THEME_LIST(state, { themes }) {
+			state.themeList = themes
+		},
+
 		ADD_THEME(state, { theme }) {
 			state.themeList.push(theme)
 		},
@@ -97,6 +101,12 @@ module.exports = {
 			}
 
 			commit('ADD_THEME', { theme })
+			dispatch('save')
+		},
+
+		removeThemes({ state, dispatch, commit }, { themeIds }) {
+			const filtered = state.themeList.filter(v => !themeIds.includes(v.id))
+			commit('SET_THEME_LIST', { themes: filtered })
 			dispatch('save')
 		},
 	},

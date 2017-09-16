@@ -10,7 +10,7 @@
 				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
 				GIconButton(:disabled="!editingAvailable" title="Open the folder" icon="external-link")
 			span.buttonGroup.danger
-				GIconButton(:disabled="!deletingAvailable" title="Remove" icon="trash")
+				GIconButton(:disabled="!deletingAvailable" :onPress="remove_onClick" title="Remove" icon="trash")
 </template>
 
 <style lang="sass" scoped>
@@ -64,6 +64,11 @@
 				this.$store.dispatch('preferences/addThemePath', { themePath })
 			},
 
+			removeThemePath(themeIds) {
+				this.$store.dispatch('preferences/removeThemes', { themeIds })
+				this.selectedIds.length = 0  // remove all selection
+			},
+
 			add_onClick() {
 				dialog.showOpenDialog({ properties: ['openDirectory'] })
 					.then(result => {
@@ -74,6 +79,22 @@
 
 						const path = result[0]
 						this.addThemePath(path)
+					})
+			},
+
+			remove_onClick() {
+				const selectedThemeNameListText = this.selectedIds
+					.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
+					.filter(v => v)  // ignore not-found ones
+					.map(v => `- ${v.name}`)
+					.join('\n')
+
+				const message = 'Are you sure you want to remove followings from the list?\n\n' + selectedThemeNameListText
+				dialog.ask(message)
+					.then(ok => {
+						if (ok) {
+							this.removeThemePath(this.selectedIds)
+						}
 					})
 			},
 		},
