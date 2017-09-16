@@ -51,9 +51,12 @@ function createArgFromPreferences(preferences) {
 		databasePath: path.resolve(preferences.databasePath),
 		wordpressPath: path.resolve(preferences.wordpressPath),
 	}
-	arg.themeList = preferences.themeList.map(v => {
-		const themePath = v.path || '.'
-		return Object.assign({}, v, { path: path.resolve(themePath) })
+
+	arg.themeVolumeOptions = preferences.themeList.map((v, i) => {
+		const hostPath = path.resolve(v.path)  // TODO validate
+		const containerPath = `/var/www/html/wp-content/themes/wapcon-${i}`  // TODO check what if change current theme's order
+		const option = `-v ${hostPath}:${containerPath}`
+		return option
 	})
 
 	return arg
@@ -87,7 +90,7 @@ function stopDb() {
 	return run(command)
 }
 
-function startPhp({ wordpressPath }) {
+function startPhp({ wordpressPath, themeVolumeOptions }) {
 	const command = [
 		'docker run',
 		'-d',
@@ -97,6 +100,7 @@ function startPhp({ wordpressPath }) {
 		'--env-file ./machine-env',
 		'-p 9000:9000',
 		`-v ${wordpressPath}:/var/www/html`,
+		...themeVolumeOptions,
 		'ginpei/wapcon-php',
 	].join(' ')
 	return run(command)
@@ -107,7 +111,7 @@ function stopPhp() {
 	return run(command)
 }
 
-function startWww({ wordpressPath }) {
+function startWww({ wordpressPath, themeVolumeOptions }) {
 	const command = [
 		'docker run',
 		'-d',
@@ -116,6 +120,7 @@ function startWww({ wordpressPath }) {
 		'--link wapcon-php:php',
 		'-p 80:80',
 		`-v ${wordpressPath}:/var/www/html`,
+		...themeVolumeOptions,
 		'ginpei/wapcon-www',
 	].join(' ')
 	return run(command)
