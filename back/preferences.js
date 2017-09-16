@@ -3,7 +3,7 @@ const fs = require('fs')
 const bridge = require('./lib/bridge.js')
 const defaultData = require('./defaultPreferences.json')
 
-const path = '../user/preferences.json'
+const preferencesPath = __dirname + '/../user/preferences.json'
 const options = { encoding: 'utf8' }
 
 /**
@@ -17,13 +17,14 @@ const options = { encoding: 'utf8' }
  */
 function load() {
 	return new Promise((resolve, reject) => {
-		fs.readFile(path, options, (err, json) => {
-			if (err.message.startsWith('ENOENT: ')) {
-				resolve(defaultData)
-				return
-			}
-			else if (err) {
-				reject(err)
+		fs.readFile(preferencesPath, options, (err, json) => {
+			if (err) {
+				if (err.message.startsWith('ENOENT: ')) {
+					resolve(defaultData)
+				}
+				else {
+					reject(err)
+				}
 				return
 			}
 
@@ -49,7 +50,7 @@ function save(data) {
 	return new Promise((resolve, reject) => {
 		const json = JSON.stringify(data, null, 2)
 
-		fs.writeFile(path, json, options, (err) => {
+		fs.writeFile(preferencesPath, json, options, (err) => {
 			if (err) {
 				reject(err)
 				return

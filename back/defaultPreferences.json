@@ -3,9 +3,7 @@
     "path": "user/db"
   },
   "theme": {
-    "list": [
-			{ "name": "hehehe" }
-		]
+    "list": []
   },
   "wordpress": {
     "path": "user/wordpress"
