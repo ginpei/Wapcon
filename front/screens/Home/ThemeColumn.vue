@@ -1,11 +1,11 @@
 <template lang="pug">
 	div.container
 		GHeading.heading Themes
-		select(@change="onChange" v-model="selectedIds" multiple)
+		select(v-model="selectedIds" multiple)
 			ThemeListRow(v-for="v in $store.state.preferences.themeList" :theme="v")
 		div.buttons
 			span.buttonGroup
-				GIconButton(title="Add" icon="file-o")
+				GIconButton(:onPress="add_onClick" title="Add" icon="file-o")
 			span.buttonGroup
 				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
 				GIconButton(:disabled="!editingAvailable" title="Open the folder" icon="external-link")
@@ -34,6 +34,7 @@
 	const GIconButton = require('../../components/form/GIconButton.vue')
 
 	const ThemeListRow = require('./ThemeListRow.vue')
+	const dialog = require('../../lib/dialog.js')
 
 	module.exports = {
 		components: {
@@ -59,8 +60,21 @@
 		},
 
 		methods: {
-			onChange() {
-				// TODO remove me
+			addThemePath(themePath) {
+				this.$store.dispatch('preferences/addThemePath', { themePath })
+			},
+
+			add_onClick() {
+				dialog.showOpenDialog({ properties: ['openDirectory'] })
+					.then(result => {
+						// cancelled
+						if (!result) {
+							return
+						}
+
+						const path = result[0]
+						this.addThemePath(path)
+					})
 			},
 		},
 	}

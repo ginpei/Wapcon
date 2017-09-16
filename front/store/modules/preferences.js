@@ -1,3 +1,5 @@
+const path = require('path')
+
 const bridge = require('../../lib/bridge.js')
 
 module.exports = {
@@ -47,6 +49,10 @@ module.exports = {
 			state.themeList = data.theme.list
 			state.wordpressPath = data.wordpress.path
 		},
+
+		ADD_THEME(state, { theme }) {
+			state.themeList.push(theme)
+		},
 	},
 
 	actions: {
@@ -74,6 +80,24 @@ module.exports = {
 				.catch(error => {
 					console.error(error)
 				})
+		},
+
+		addThemePath({ dispatch, commit }, { themePath }) {
+			if (!themePath) {
+				return
+			}
+
+			// Browserify's path.basename() doesn't support Windows path
+			name = path.basename(themePath.replace(/\\/g, '/'))
+
+			const theme = {
+				id: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
+				name: name,
+				path: themePath,
+			}
+
+			commit('ADD_THEME', { theme })
+			dispatch('save')
 		},
 	},
 }
