@@ -1,5 +1,5 @@
 <template lang="pug">
-	GButton(:title="title")
+	GButton(:title="title" :onPress="onPress")
 		i.fa(:class="classes" aria-hidden="true")
 </template>
 
@@ -21,6 +21,7 @@
 		props: [
 			'icon',
 			'title',
+			'onPress',
 		],
 
 		computed: {
