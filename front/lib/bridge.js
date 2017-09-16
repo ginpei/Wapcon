@@ -1,4 +1,4 @@
-const { ipcRenderer } = window.electron;
+const { ipcRenderer } = window.electron
 
 let idCount = 0
 

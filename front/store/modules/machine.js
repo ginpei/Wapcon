@@ -10,17 +10,17 @@ module.exports = {
 
 	getters: {
 		working(state) {
-			return state.numWorking > 0;
+			return state.numWorking > 0
 		},
 	},
 
 	mutations: {
 		START_WORKING(state) {
-			state.numWorking += 1;
+			state.numWorking += 1
 		},
 
 		FINISH_WORKING(state) {
-			state.numWorking -= 1;
+			state.numWorking -= 1
 		},
 
 		SET_RUNNING(state, { running }) {
@@ -30,11 +30,11 @@ module.exports = {
 
 	actions: {
 		updateStatus({ dispatch, commit }) {
-			commit('START_WORKING');
+			commit('START_WORKING')
 			bridge('checkMachinStatus')
 				.then(status => {
-					commit('FINISH_WORKING');
-					commit('SET_RUNNING', { running: status.running });
+					commit('FINISH_WORKING')
+					commit('SET_RUNNING', { running: status.running })
 
 					// some are running, others are not running
 					if (!status.running && (status.db || status.php || status.www)) {
@@ -44,21 +44,21 @@ module.exports = {
 		},
 
 		start({ rootState, commit, dispatch }) {
-			commit('START_WORKING');
-			commit('SET_RUNNING', { running: true });
+			commit('START_WORKING')
+			commit('SET_RUNNING', { running: true })
 			bridge('startMachine', rootState.preferences)
 				.then(status => {
-					commit('FINISH_WORKING');
+					commit('FINISH_WORKING')
 					dispatch('updateStatus')
 				})
 		},
 
 		stop({ commit, dispatch }) {
-			commit('START_WORKING');
-			commit('SET_RUNNING', { running: false });
+			commit('START_WORKING')
+			commit('SET_RUNNING', { running: false })
 			bridge('stopMachine')
 				.then(status => {
-					commit('FINISH_WORKING');
+					commit('FINISH_WORKING')
 					dispatch('updateStatus')
 				})
 		},

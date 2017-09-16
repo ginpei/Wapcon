@@ -14,7 +14,7 @@ module.exports = {
 
 	getters: {
 		working(state) {
-			return state.numWorking > 0;
+			return state.numWorking > 0
 		},
 
 		/**
@@ -37,11 +37,11 @@ module.exports = {
 
 	mutations: {
 		START_WORKING(state) {
-			state.numWorking += 1;
+			state.numWorking += 1
 		},
 
 		FINISH_WORKING(state) {
-			state.numWorking -= 1;
+			state.numWorking -= 1
 		},
 
 		SET_DATA(state, { data }) {
@@ -61,13 +61,11 @@ module.exports = {
 
 	actions: {
 		load({ commit }) {
-			console.log('# loadPreferences')
-			commit('START_WORKING');
+			commit('START_WORKING')
 			bridge('loadPreferences')
 				.then(data => {
-					console.log(data)
-					commit('FINISH_WORKING');
-					commit('SET_DATA', { data });
+					commit('FINISH_WORKING')
+					commit('SET_DATA', { data })
 				})
 				.catch(error => {
 					console.error(error)
@@ -75,11 +73,11 @@ module.exports = {
 		},
 
 		save({ getters, commit }) {
-			commit('START_WORKING');
+			commit('START_WORKING')
 
-			bridge('savePreferences', { data: getters['data'] })
+			bridge('savePreferences', { data: getters.data })
 				.then(data => {
-					commit('FINISH_WORKING');
+					commit('FINISH_WORKING')
 				})
 				.catch(error => {
 					console.error(error)
@@ -92,7 +90,7 @@ module.exports = {
 			}
 
 			// Browserify's path.basename() doesn't support Windows path
-			name = path.basename(themePath.replace(/\\/g, '/'))
+			const name = path.basename(themePath.replace(/\\/g, '/'))
 
 			const theme = {
 				id: `${Date.now()}${Math.floor(Math.random() * 1000)}`,

@@ -3,17 +3,17 @@ class RoutingAnimation {
 	 * Prepare to animate and invoke the first task.
 	 */
 	start() {
-		this.animateNext();
+		this.animateNext()
 
-		this._scrollListener = ()=>this.animateAll();
-		window.document.addEventListener('scroll', this._scrollListener);
+		this._scrollListener = () => this.animateAll()
+		window.document.addEventListener('scroll', this._scrollListener)
 	}
 
 	/**
 	 * Clean up.
 	 */
 	stop() {
-		window.document.removeEventListener('scroll', this._scrollListener);
+		window.document.removeEventListener('scroll', this._scrollListener)
 	}
 
 	/**
@@ -22,22 +22,22 @@ class RoutingAnimation {
 	 */
 	resetElement(el) {
 		if (el && el.classList && typeof el.classList.remove === 'function') {
-			el.classList.remove('is-preparedRoutingAnimation');
+			el.classList.remove('is-preparedRoutingAnimation')
 		}
-		this.animateNext();
+		this.animateNext()
 	}
 
 	/**
 	 * Invoke animation for one target, and get ready for the next.
 	 */
 	animateNext() {
-		const el = this._selectAnimationTargets()[0];
+		const el = this._selectAnimationTargets()[0]
 		if (el) {
-			this.stopAnimating();
-			this.tmDispatchAnimation = setTimeout(()=>{
-				this._startAnimation(el);
-				this.animateNext();
-			}, 50);
+			this.stopAnimating()
+			this.tmDispatchAnimation = setTimeout(() => {
+				this._startAnimation(el)
+				this.animateNext()
+			}, 50)
 		}
 	}
 
@@ -45,20 +45,20 @@ class RoutingAnimation {
 	 * Invoke animation for all targets at once.
 	 */
 	animateAll() {
-		this.stopAnimating();
+		this.stopAnimating()
 
-		const els = this._selectAnimationTargets();
-		Array.from(els).forEach((el)=>{
-			this._startAnimation(el);
-		});
+		const els = this._selectAnimationTargets()
+		Array.from(els).forEach((el) => {
+			this._startAnimation(el)
+		})
 	}
 
 	/**
 	 * Stop invocation of animation.
 	 */
 	stopAnimating() {
-		clearTimeout(this.tmDispatchAnimation);
-		this.tmDispatchAnimation = null;
+		clearTimeout(this.tmDispatchAnimation)
+		this.tmDispatchAnimation = null
 	}
 
 	/**
@@ -66,7 +66,7 @@ class RoutingAnimation {
 	 * @returns {NodeList} NodeList is not Array.
 	 */
 	_selectAnimationTargets() {
-		return window.document.querySelectorAll('[routing-animation]:not(.is-preparedRoutingAnimation)');
+		return window.document.querySelectorAll('[routing-animation]:not(.is-preparedRoutingAnimation)')
 	}
 
 	/**
@@ -74,14 +74,14 @@ class RoutingAnimation {
 	 * @param {Element} el The target element.
 	 */
 	_startAnimation(el) {
-		el.classList.add('is-preparedRoutingAnimation');
+		el.classList.add('is-preparedRoutingAnimation')
 	}
 }
 
 /**
  * @type RoutingAnimation
  */
-RoutingAnimation.singletonInstance = null;
+RoutingAnimation.singletonInstance = null
 
 /**
  * Return the existing instance.
@@ -90,9 +90,9 @@ RoutingAnimation.singletonInstance = null;
  */
 RoutingAnimation.get = function() {
 	if (!RoutingAnimation.singletonInstance) {
-		RoutingAnimation.singletonInstance = new RoutingAnimation();
+		RoutingAnimation.singletonInstance = new RoutingAnimation()
 	}
-	return RoutingAnimation.singletonInstance;
-};
+	return RoutingAnimation.singletonInstance
+}
 
-module.exports = RoutingAnimation;
+module.exports = RoutingAnimation
