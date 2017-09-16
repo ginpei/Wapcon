@@ -29,12 +29,17 @@ module.exports = {
 	},
 
 	actions: {
-		updateStatus({ commit }) {
+		updateStatus({ dispatch, commit }) {
 			commit('START_WORKING');
 			bridge('checkMachinStatus')
 				.then(status => {
 					commit('FINISH_WORKING');
 					commit('SET_RUNNING', { running: status.running });
+
+					// some are running, others are not running
+					if (!status.running && (status.db || status.php || status.www)) {
+						dispatch('stop')
+					}
 				})
 		},
 
