@@ -1,12 +1,16 @@
 <template lang="pug">
 	div.container
-		GHeading.heading Themes {{$store.state.preferences.themeList.length}}
+		GHeading.heading Themes
 		select(multiple)
-			option(v-for="v in $store.state.preferences.themeList") {{v.name}}
+			ThemeListRow(v-for="v in $store.state.preferences.themeList" :theme="v")
 		div.buttons
-			GIconButton(title="Add a folder" icon="plus")
-			GIconButton(title="Remove from this list" icon="minus")
-			GIconButton.folder(title="Open the folder" icon="folder-open-o")
+			span.buttonGroup
+				GIconButton(title="Add" icon="file-o")
+			span.buttonGroup
+				GIconButton(title="Edit" icon="pencil-square-o")
+				GIconButton(title="Open the folder" icon="external-link")
+			span.buttonGroup.danger
+				GIconButton(title="Remove" icon="trash")
 </template>
 
 <style lang="sass" scoped>
@@ -15,7 +19,10 @@
 		grid-template-rows: 20px auto 50px
 		grid-gap: 8px
 
-	.folder
+	.buttonGroup
+		margin-right: 8px
+
+	.danger
 		float: right
 </style>
 
@@ -23,10 +30,13 @@
 	const GHeading = require('../../components/form/GHeading.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 
+	const ThemeListRow = require('./ThemeListRow.vue')
+
 	module.exports = {
 		components: {
 			GHeading,
 			GIconButton,
+			ThemeListRow,
 		},
 
 		data() {
