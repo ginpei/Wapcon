@@ -68,14 +68,14 @@ function stopMachine(event, arg) {
 	])
 }
 
-function startDb({ dbPath }) {
-	// TODO set the volume outside
+function startDb({ databasePath }) {
 	const command = [
 		'docker run',
 		'-d',
 		'--rm',
 		'--name wapcon-db',
 		'--env-file ./machine-env',
+		`-v ${databasePath}:/var/lib/mysql`,
 		'ginpei/wapcon-db',
 	].join(' ')
 	return run(command)
