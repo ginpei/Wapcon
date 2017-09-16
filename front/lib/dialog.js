@@ -1,5 +1,7 @@
 const bridge = require('./bridge.js')
 
+const electron = window.electron
+
 module.exports = {
 	defaultAskOptions: {
 		buttons: ['OK', 'Cancel'],
@@ -16,10 +18,16 @@ module.exports = {
 	},
 
 	showOpenDialog(options) {
-		return bridge('showOpenDialog', options)
+		const browserWindowId = this.getBrowserWindowId()
+		return bridge('showOpenDialog', { browserWindowId, options })
 	},
 
 	showMessageBox(options) {
-		return bridge('showMessageBox', options)
+		const browserWindowId = this.getBrowserWindowId()
+		return bridge('showMessageBox', { browserWindowId, options })
+	},
+
+	getBrowserWindowId() {
+		return electron.remote.getCurrentWindow().id
 	},
 }
