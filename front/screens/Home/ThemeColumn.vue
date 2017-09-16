@@ -1,16 +1,16 @@
 <template lang="pug">
 	div.container
 		GHeading.heading Themes
-		select(multiple)
+		select(@change="onChange" v-model="selectedIds" multiple)
 			ThemeListRow(v-for="v in $store.state.preferences.themeList" :theme="v")
 		div.buttons
 			span.buttonGroup
 				GIconButton(title="Add" icon="file-o")
 			span.buttonGroup
-				GIconButton(title="Edit" icon="pencil-square-o")
-				GIconButton(title="Open the folder" icon="external-link")
+				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
+				GIconButton(:disabled="!editingAvailable" title="Open the folder" icon="external-link")
 			span.buttonGroup.danger
-				GIconButton(title="Remove" icon="trash")
+				GIconButton(:disabled="!deletingAvailable" title="Remove" icon="trash")
 </template>
 
 <style lang="sass" scoped>
@@ -44,10 +44,24 @@
 
 		data() {
 			return {
+				selectedIds: [],
 			}
 		},
 
+		computed: {
+			editingAvailable() {
+				return this.selectedIds.length === 1
+			},
+
+			deletingAvailable() {
+				return this.selectedIds.length > 0
+			},
+		},
+
 		methods: {
+			onChange() {
+				// TODO remove me
+			},
 		},
 	}
 </script>
