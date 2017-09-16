@@ -4,6 +4,7 @@ const { app, BrowserWindow } = require('electron');
 
 const dialog = require('./back/dialog.js')
 const docker = require('./back/docker.js')
+const misc = require('./back/misc.js')
 const preferences = require('./back/preferences.js')
 
 let win;
@@ -45,4 +46,5 @@ app.on('activate', ()=>{
 
 dialog.init()
 docker.init()
+misc.init()
 preferences.init()

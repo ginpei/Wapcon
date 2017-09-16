@@ -8,7 +8,7 @@
 				GIconButton(:onPress="add_onClick" title="Add" icon="file-o")
 			span.buttonGroup
 				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
-				GIconButton(:disabled="!editingAvailable" title="Open the folder" icon="external-link")
+				GIconButton(:disabled="!editingAvailable" :onPress="open_onClick" title="Open the folder" icon="external-link")
 			span.buttonGroup.danger
 				GIconButton(:disabled="!deletingAvailable" :onPress="remove_onClick" title="Remove" icon="trash")
 </template>
@@ -32,8 +32,9 @@
 <script>
 	const GHeading = require('../../components/form/GHeading.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
-
 	const ThemeListRow = require('./ThemeListRow.vue')
+
+	const bridge = require('../../lib/bridge.js')
 	const dialog = require('../../lib/dialog.js')
 
 	module.exports = {
@@ -80,6 +81,12 @@
 						const path = result[0]
 						this.addThemePath(path)
 					})
+			},
+
+			open_onClick() {
+				const id = this.selectedIds[0]
+				const theme = this.$store.state.preferences.themeList.find(v => v.id === id)
+				bridge('openDirectory', { dirPath: theme.path })
 			},
 
 			remove_onClick() {
