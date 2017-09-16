@@ -69,6 +69,7 @@ function stopMachine(event, arg) {
 }
 
 function startDb({ databasePath }) {
+	// TODO wait until DB is actually ready
 	const command = [
 		'docker run',
 		'-d',
