@@ -58,6 +58,12 @@
 			deletingAvailable() {
 				return this.selectedIds.length > 0
 			},
+
+			selectedThemes() {
+				return this.selectedIds
+					.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
+					.filter(v => v)  // ignore not-found ones
+			}
 		},
 
 		methods: {
@@ -90,9 +96,7 @@
 			},
 
 			remove_onClick() {
-				const selectedThemeNameListText = this.selectedIds
-					.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
-					.filter(v => v)  // ignore not-found ones
+				const selectedThemeNameListText = this.selectedThemes
 					.map(v => `- ${v.name}`)
 					.join('\n')
 
