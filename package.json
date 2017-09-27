@@ -6,9 +6,9 @@
   "scripts": {
     "build-front": "NODE_ENV=production browserify -g envify -t vueify -e front/index.js -o build/front.js",
     "dev-front": "watchify -dv -t vueify -p browserify-hmr -e front/index.js -o build/front.js",
-    "run": "electron .",
     "lint": "eslint --ext js,vue ./main.js front/**/*.js front/**/*.vue",
     "postinstall": "mkdir build || true",
+    "run": "electron .",
     "start": "npm run lint -s & concurrently \"npm run run -s\" \"npm run dev-front -s\""
   },
   "dependencies": {
