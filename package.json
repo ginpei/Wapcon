@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "build-front": "NODE_ENV=production browserify -g envify -t vueify -e front/index.js -o build/front.js",
+    "build-front": "cross-env NODE_ENV=production browserify -g envify -t vueify -e front/index.js -o build/front.js",
     "dev-front": "watchify -dv -t vueify -p browserify-hmr -e front/index.js -o build/front.js",
     "lint": "eslint --ext js,vue ./main.js front/**/*.js front/**/*.vue",
     "postinstall": "mkdir build || true",
     "run": "electron .",
     "start": "npm run lint -s & concurrently \"npm run run -s\" \"npm run dev-front -s\"",
-    "test": "set NODE_ENV=test&& mocha test/front/"
+    "test": "cross-env NODE_ENV=test mocha test/front/"
   },
   "dependencies": {
     "browserify": "^14.4.0",
@@ -29,6 +29,7 @@
     "browserify-hmr": "^0.3.5",
     "chai": "^4.1.2",
     "concurrently": "^3.4.0",
+    "cross-env": "^5.0.5",
     "eslint": "^4.0.0",
     "eslint-plugin-html": "^3.0.0",
     "mocha": "^3.5.3",
