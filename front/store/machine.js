@@ -1,4 +1,4 @@
-const bridge = require('../../lib/bridge.js')
+const bridge = require('../lib/bridge.js')
 
 module.exports = {
 	namespaced: true,

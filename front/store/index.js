@@ -1,8 +1,8 @@
 const Vue = require('vue')
 const Vuex = require('vuex')
 
-const machine = require('./modules/machine.js')
-const preferences = require('./modules/preferences.js')
+const machine = require('./machine.js')
+const preferences = require('./preferences.js')
 
 Vue.use(Vuex)
 
