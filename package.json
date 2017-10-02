@@ -10,7 +10,7 @@
     "postinstall": "mkdir build || true",
     "run": "electron .",
     "start": "npm run lint -s & concurrently \"npm run run -s\" \"npm run dev-front -s\"",
-    "test": "cross-env NODE_ENV=test mocha test/front/"
+    "test": "cross-env NODE_ENV=test mocha test/front/**/*.test.js"
   },
   "dependencies": {
     "browserify": "^14.4.0",
