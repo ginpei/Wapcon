@@ -26,8 +26,11 @@
 					td
 						input(:value="$store.state.preferences.wordpressPath" readonly)
 				tr
-					th Version
-					td 0.0.0
+					th Download
+					td
+						a(href="https://wordpress.org/download/")
+							i.fa.fa-external-link
+							|  WordPress.org
 
 		div
 			GIconButton(:onPress="revert_onClick" icon="undo") Revert
