@@ -54,6 +54,16 @@ module.exports = {
 			state.themeList = themes
 		},
 
+		UPDATE_THEME(state, { theme }) {
+			const oldTheme = state.themeList.find(v => v.id === theme.id)
+			if (!oldTheme) {
+				throw new Error('Theme not found')
+			}
+
+			const index = state.themeList.indexOf(oldTheme)
+			state.themeList[index] = theme
+		},
+
 		ADD_THEME(state, { theme }) {
 			state.themeList.push(theme)
 		},
@@ -99,6 +109,11 @@ module.exports = {
 			}
 
 			commit('ADD_THEME', { theme })
+			dispatch('save')
+		},
+
+		updateTheme({ state, dispatch, commit }, { theme }) {
+			commit('UPDATE_THEME', { theme })
 			dispatch('save')
 		},
 

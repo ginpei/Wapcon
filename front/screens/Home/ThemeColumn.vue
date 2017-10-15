@@ -1,13 +1,13 @@
 <template lang="pug">
 	div.container
 		GHeading.heading Themes
-		select(v-model="selectedIds" multiple)
+		select(v-model="selectedIds" @dblclick="themes_onDblClick" multiple)
 			ThemeListRow(v-for="v in $store.state.preferences.themeList" :theme="v")
 		div.buttons
 			span.buttonGroup
 				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 			span.buttonGroup
-				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
+				GIconButton(:disabled="!editingAvailable" :onPress="edit_onClick" title="Edit" icon="pencil-square-o")
 				GIconButton(:disabled="!editingAvailable" :onPress="open_onClick" title="Open the folder" icon="external-link")
 			span.buttonGroup.danger
 				GIconButton(:disabled="!deletingAvailable" :onPress="remove_onClick" title="Remove" icon="trash")
@@ -71,9 +71,20 @@
 				this.$store.dispatch('preferences/addThemePath', { themePath })
 			},
 
+			edit(themeId = null) {
+				if (themeId === null) {
+					themeId = this.selectedIds[0]
+				}
+				this.$router.push(`/themes/${themeId}/edit`)
+			},
+
 			removeThemePath(themeIds) {
 				this.$store.dispatch('preferences/removeThemes', { themeIds })
 				this.selectedIds.length = 0  // remove all selection
+			},
+
+			themes_onDblClick() {
+				this.edit()
 			},
 
 			add_onClick() {
@@ -87,6 +98,10 @@
 						const path = result[0]
 						this.addThemePath(path)
 					})
+			},
+
+			edit_onClick() {
+				this.edit()
 			},
 
 			open_onClick() {
