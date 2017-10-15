@@ -58,13 +58,17 @@
 		},
 
 		methods: {
-			name_onChange() {
+			save() {
 				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
+			},
+
+			name_onChange() {
+				this.save()
 			},
 
 			revert_onClick() {
 				this.theme.name = this.originalName
-				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
+				this.save()
 			},
 		},
 	}
