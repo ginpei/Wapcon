@@ -43,11 +43,17 @@
 
 		data() {
 			const id = this.$route.params.id
-			const theme = this.$store.state.preferences.themeList.find(v => v.id === id)
-			// TODO what if theme is not found
+			const theme = this.$store.state.preferences.themeList.find(v => v.id === id) || {}
 			return {
 				originalName: theme.name,
 				theme: theme,
+			}
+		},
+
+		created() {
+			// if not found, get back home
+			if (!this.theme.id) {
+				this.$router.push('/')
 			}
 		},
 
