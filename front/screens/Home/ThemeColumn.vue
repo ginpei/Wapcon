@@ -5,7 +5,7 @@
 			ThemeListRow(v-for="v in $store.state.preferences.themeList" :theme="v")
 		div.buttons
 			span.buttonGroup
-				GIconButton(:onPress="add_onClick" title="Add" icon="file-o")
+				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 			span.buttonGroup
 				GIconButton(:disabled="!editingAvailable" title="Edit" icon="pencil-square-o")
 				GIconButton(:disabled="!editingAvailable" :onPress="open_onClick" title="Open the folder" icon="external-link")
