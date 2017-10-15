@@ -5,7 +5,7 @@
 		div
 			a(:class="linkClasses" href="http://localhost") http://localhost
 		div.settings
-			GIconButton(title="Settings" icon="cog")
+			GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 </template>
 
 <style lang="sass" scoped>
@@ -54,7 +54,10 @@
 			},
 		},
 
-		// methods: {
-		// },
+		methods: {
+			preferences_oncClick() {
+				this.$router.push('/preferences')
+			},
+		},
 	}
 </script>
