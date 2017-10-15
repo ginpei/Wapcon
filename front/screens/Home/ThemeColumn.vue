@@ -63,7 +63,7 @@
 				return this.selectedIds
 					.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
 					.filter(v => v)  // ignore not-found ones
-			}
+			},
 		},
 
 		methods: {

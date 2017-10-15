@@ -34,7 +34,7 @@ const functions = {
 	 * @param {function} options.reject
 	 * @returns {function}
 	 */
-	createListener({ channel, bridge$id, resolve, reject }) {	
+	createListener({ channel, bridge$id, resolve, reject }) {
 		const listener = function(event, envelope) {
 			if (envelope.bridge$id === bridge$id) {
 				functions.ipcRenderer.removeListener(channel, listener)
@@ -52,9 +52,9 @@ const functions = {
 
 	// map for tests
 	ipcRenderer: ['on', 'send', 'removeListener'].reduce((obj, name) => {
-		obj[name] = (...arg) => ipcRenderer[name].apply(ipcRenderer, arg)
+		obj[name] = (...arg) => ipcRenderer[name](...arg)
 		return obj
-	}, {})
+	}, {}),
 }
 
 // export

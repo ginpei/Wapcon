@@ -66,13 +66,7 @@ module.exports = {
 		"eol-last": "error",
 		"eqeqeq": "off",
 		"func-names": "off",
-		"func-style": [
-			"error",
-			"declaration",
-			{
-				"allowArrowFunctions": true,
-			},
-		],
+		"func-style": "off",
 		"generator-star-spacing": "error",
 		"global-require": "error",
 		"guard-for-in": "off",
