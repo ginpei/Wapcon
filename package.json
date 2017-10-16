@@ -21,9 +21,9 @@
     "node-sass": "^4.5.3",
     "pug": "^2.0.0-rc.3",
     "vue": "^2.3.3",
-    "vue-router": "^2.5.3",
+    "vue-router": "^3.0.1",
     "vueify": "^9.4.1",
-    "vuex": "^2.3.1"
+    "vuex": "^3.0.0"
   },
   "devDependencies": {
     "browserify-hmr": "^0.3.5",
@@ -32,7 +32,7 @@
     "cross-env": "^5.0.5",
     "eslint": "^4.0.0",
     "eslint-plugin-html": "^3.0.0",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.1",
     "sinon": "^4.0.0",
     "watchify": "^3.9.0"
   }
