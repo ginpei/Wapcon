@@ -5,6 +5,7 @@
 		div
 			a(:class="linkClasses" href="http://localhost") http://localhost
 		div.settings
+			GIconButton(v-show="$store.getters['machine/failed']" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
 			GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 </template>
 
@@ -27,6 +28,7 @@
 	const GHeading = require('../../components/form/GHeading.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 	const GSwitch = require('../../components/form/GSwitch.vue')
+	const dialog = require('../../lib/dialog.js')
 
 	module.exports = {
 		components: {
@@ -52,9 +54,23 @@
 					disabled: !this.running,
 				}
 			},
+
+			errorMessage() {
+				const message = 'Error:\n\n' + this.$store.state.machine.errors.map(v => `${v.type}: ${v.text}`).join('\n')
+				return message
+			},
 		},
 
 		methods: {
+			seeErrors_oncClick() {
+				dialog.inform(this.errorMessage, { buttons: ['Close', 'Clear'] })
+					.then(buttonIndex => {
+						if (buttonIndex === 1) {
+							this.$store.dispatch('machine/clearErrors')
+						}
+					})
+			},
+
 			preferences_oncClick() {
 				this.$router.push('/preferences')
 			},

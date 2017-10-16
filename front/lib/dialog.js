@@ -3,8 +3,22 @@ const bridge = require('./bridge.js')
 const electron = window.electron
 
 module.exports = {
+	defaultInformOptions: {
+		buttons: ['OK'],
+	},
+
 	defaultAskOptions: {
 		buttons: ['OK', 'Cancel'],
+	},
+
+	inform(message, originalOptions) {
+		return new Promise((resolve, reject) => {
+			const options = Object.assign({}, this.defaultInformOptions, originalOptions, { message })
+			this.showMessageBox(options)
+				.then(buttonIndex => {
+					resolve(buttonIndex)
+				})
+		})
 	},
 
 	ask(message, originalOptions) {

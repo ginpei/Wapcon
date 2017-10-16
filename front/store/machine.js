@@ -6,11 +6,16 @@ module.exports = {
 	state: {
 		numWorking: 0,
 		running: false,
+		errors: [],
 	},
 
 	getters: {
 		working(state) {
 			return state.numWorking > 0
+		},
+
+		failed(state) {
+			return state.errors.length > 0
 		},
 	},
 
@@ -25,6 +30,14 @@ module.exports = {
 
 		SET_RUNNING(state, { running }) {
 			state.running = running
+		},
+
+		ADD_ERRORS(state, { errors }) {
+			errors.forEach(v => state.errors.push(v))
+		},
+
+		CLEAR_ERRORS(state) {
+			state.errors = []
 		},
 	},
 
@@ -48,6 +61,16 @@ module.exports = {
 			commit('SET_RUNNING', { running: true })
 			bridge('startMachine', rootState.preferences)
 				.then(status => {
+					const errors = []
+					;['db', 'php', 'www'].forEach(type => {
+						const row = status[type]
+						if (row.code !== 0) {
+							const errorResult = row.result[row.result.length - 1]
+							errors.push({ type, text: errorResult.text })
+						}
+					})
+					commit('ADD_ERRORS', { errors })
+
 					commit('FINISH_WORKING')
 					dispatch('updateStatus')
 				})
@@ -61,6 +84,10 @@ module.exports = {
 					commit('FINISH_WORKING')
 					dispatch('updateStatus')
 				})
+		},
+
+		clearErrors({ commit }) {
+			commit('CLEAR_ERRORS')
 		},
 	},
 }
