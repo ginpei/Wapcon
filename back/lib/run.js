@@ -8,17 +8,18 @@ function noop(){}
  * @returns {Promise}
  */
 module.exports = function command(command, callback = noop) {
-	console.log('$', command)
+	const [entry, ...commandArgs] = command instanceof Array ? command : command.split(' ')
+	const sCommand = entry + ' ' + commandArgs.join(' ')
+	console.log('$', sCommand)
 
 	return new Promise((resolve, reject) => {
 		const result = [
 			{
-				text: command,
+				text: sCommand,
 				type: 'command',
 			},
 		]
 
-		const [entry, ...commandArgs] = command.split(' ')
 		const cmd = spawn(entry, commandArgs)
 
 		cmd.stdout.on('data', data => {

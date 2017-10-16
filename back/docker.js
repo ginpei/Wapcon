@@ -55,12 +55,13 @@ function createArgFromPreferences(preferences) {
 	// TODO remove old volume directories;
 	// empty directories are created and won't be removed
 	// (e.g. ~/mywp/wp-content/themes/wapcon-123)
-	arg.themeVolumeOptions = preferences.themeList.map((v, i) => {
-		const hostPath = path.resolve(v.path)  // TODO validate
-		const containerPath = `/var/www/html/wp-content/themes/wapcon-${i}`  // TODO check what if change current theme's order
-		const option = `-v ${hostPath}:${containerPath}`
-		return option
-	})
+	arg.themeVolumeOptions = preferences.themeList.reduce((array, theme, index) => {
+		const hostPath = path.resolve(theme.path)  // TODO validate
+		const containerPath = `/var/www/html/wp-content/themes/wapcon-${index}`  // TODO check what if change current theme's order
+		array.push('-v')
+		array.push(`${hostPath}:${containerPath}`)
+		return array
+	}, [])
 
 	return arg
 }
@@ -95,17 +96,18 @@ function stopDb() {
 
 function startPhp({ wordpressPath, themeVolumeOptions }) {
 	const command = [
-		'docker run',
+		'docker',
+		'run',
 		'-d',
 		'--rm',
-		'--name wapcon-php',
-		'--link wapcon-db:db',
-		'--env-file ./machine-env',
-		'-p 9000:9000',
-		`-v ${wordpressPath}:/var/www/html`,
+		'--name', 'wapcon-php',
+		'--link', 'wapcon-db:db',
+		'--env-file', './machine-env',
+		'-p', '9000:9000',
+		'-v', `${wordpressPath}:/var/www/html`,
 		...themeVolumeOptions,
 		'ginpei/wapcon-php',
-	].join(' ')
+	]
 	return run(command)
 }
 
@@ -116,16 +118,17 @@ function stopPhp() {
 
 function startWww({ wordpressPath, themeVolumeOptions }) {
 	const command = [
-		'docker run',
+		'docker',
+		'run',
 		'-d',
 		'--rm',
-		'--name wapcon-www',
-		'--link wapcon-php:php',
-		'-p 80:80',
-		`-v ${wordpressPath}:/var/www/html`,
+		'--name', 'wapcon-www',
+		'--link', 'wapcon-php:php',
+		'-p', '80:80',
+		'-v', `${wordpressPath}:/var/www/html`,
 		...themeVolumeOptions,
 		'ginpei/wapcon-www',
-	].join(' ')
+	]
 	return run(command)
 }
 
