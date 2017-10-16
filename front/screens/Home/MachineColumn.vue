@@ -56,7 +56,10 @@
 			},
 
 			errorMessage() {
-				const message = 'Error:\n\n' + this.$store.state.machine.errors.map(v => `${v.type}: ${v.text}`).join('\n')
+				const errors = this.$store.state.machine.errors
+				const message =
+					'Error:\n\n' +
+					errors.map(v => `${v.type}: ${v.text}`).join('\n')
 				return message
 			},
 		},
