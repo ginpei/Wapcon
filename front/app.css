@@ -3,13 +3,17 @@ html {
 }
 body {
 	background-color: #ccc;
-	box-shadow: 0 0 50px rgba(0, 0, 0, 0.1) inset;
-	min-height: 100%;
 	margin: 0;
+	height: 100%;
 }
 body,
 input {
 	font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Segoe UI",SegoeUI,"Helvetica","Arial",sans-serif;
+}
+
+.base-wrapper {
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.1) inset;
+	min-height: 100%;
 }
 
 a.disabled {

@@ -7,7 +7,6 @@
 <style lang="sass" scoped>
 	.row
 		display: flex
-		height: 100%
 
 	.item.main
 		flex: 1

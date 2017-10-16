@@ -1,5 +1,5 @@
 <template lang="pug">
-	div.wrapper
+	div.base-wrapper
 		slot
 </template>
 
