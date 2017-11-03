@@ -13,7 +13,7 @@
 <style lang="sass" scoped>
 	.controller
 		display: grid
-		grid-template-rows: 20px auto 50px
+		grid-template-rows: 20px auto 30px
 		grid-gap: 8px
 
 	.heading

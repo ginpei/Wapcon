@@ -16,7 +16,7 @@
 <style lang="sass" scoped>
 	.container
 		display: grid
-		grid-template-rows: 20px auto 50px
+		grid-template-rows: 20px auto 30px
 		grid-gap: 8px
 
 	.buttonGroup

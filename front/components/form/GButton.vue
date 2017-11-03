@@ -7,7 +7,7 @@
 	button
 		border: 1px solid #999
 		box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.9) inset
-		min-height: 50px
+		min-height: 30px
 		min-width: 50px
 		padding: calc(0.5em + 1px)
 		text-shadow: 1px 1px rgba(255, 255, 255, 0.5)
