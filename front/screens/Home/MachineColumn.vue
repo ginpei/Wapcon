@@ -1,9 +1,10 @@
 <template lang="pug">
 	div.controller
 		GHeading Machine
-		GSwitch(:on="running" :executing="working" :onClick="onToggleMachine")
 		div
-			a(:class="linkClasses" href="http://localhost") http://localhost
+			GSwitch(:on="running" :executing="working" :onClick="onToggleMachine")
+			div
+				a(:class="linkClasses" href="http://localhost") http://localhost
 		div.settings
 			GIconButton(v-show="$store.getters['machine/failed']" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
 			GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
