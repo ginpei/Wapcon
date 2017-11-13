@@ -1,55 +1,94 @@
 <template lang="pug">
-	BaseLayout
+	BaseLayout.baseLayout
 		div.header
-			router-link(to="/")
-				i.fa.fa-arrow-left
-				| Back
-			h1 Wapcon Preferences
+			div.header-inner
+				router-link.back(to="/")
+					i.fa.fa-arrow-left
+					| Back
+				h1.title Preferences
 
-		section
-			h2 Database
-			table
-				tr
-					th Path
-					td
-						input(:value="$store.state.preferences.databasePath" readonly)
-				tr
-					th Reset
-					td
-						GIconButton(icon="exclamation-triangle") Delete all
+		main.main
+			section
+				h2.preference-heading Database
+				table.preference-table
+					tr
+						th Path
+						td
+							input.preference-input(:value="$store.state.preferences.databasePath" readonly)
+					tr
+						th Reset
+						td
+							GIconButton(icon="exclamation-triangle") Delete all
 
-		section
-			h2 WordPress
-			table
-				tr
-					th Path
-					td
-						input(:value="$store.state.preferences.wordpressPath" readonly)
-				tr
-					th Download
-					td
-						a(href="https://wordpress.org/download/")
-							i.fa.fa-external-link
-							|  WordPress.org
+			section
+				h2.preference-heading WordPress
+				table.preference-table
+					tr
+						th Path
+						td
+							input.preference-input(:value="$store.state.preferences.wordpressPath" readonly)
+					tr
+						th Download
+						td
+							a(href="https://wordpress.org/download/")
+								i.fa.fa-external-link
+								|  WordPress.org
 
-		div
-			GIconButton(:onPress="revert_onClick" icon="undo") Revert
+			section
+				h2.preference-heading Data
+				table.preference-table
+					tr
+						th Reset
+						td
+							GIconButton(:onPress="revert_onClick" icon="undo") Revert
 </template>
 
 <style lang="sass" scoped>
+	.baseLayout
+		background-color: #fff
+
 	.header
-		display: flex
+		border-bottom: 1px solid #999
 
-		> *
-			margin: 0.2em 0.5em
+	.header-inner
+		padding: 1em 1em 0
+		max-width: 600px
+		margin: 0 auto
 
-	h1,
-	h2
+	.back
+		background-color: #efe
+		color: #060
+		display: inline-block
+		padding: .5em 1em
+
+	.title
+		padding: 0 1rem
+
+	.main
+		padding: 1em
+		max-width: 600px
+		margin: 0 auto
+
+	.preference-heading
+		background-color: #eee
+		color: #333
+		font-family: sans-serif
 		font-size: 1em
-		margin: 0
+		font-weight: normal
+		padding: .5em 1em
 
-	section
-		margin: 1em 0
+	.preference-table
+		width: 100%
+
+		& > tr > th
+			font-weight: normal
+			padding: .5em 1em
+			text-align: left
+			width: 50%
+
+	.preference-input
+		box-sizing: border-box
+		width: 100%
 </style>
 
 <script>
