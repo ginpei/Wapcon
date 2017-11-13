@@ -51,7 +51,7 @@
 		border-bottom: 1px solid #999
 
 	.header-inner
-		padding: 1em 1em 0
+		padding: 1em
 		max-width: 600px
 		margin: 0 auto
 
@@ -62,6 +62,7 @@
 		padding: .5em 1em
 
 	.title
+		margin: 0
 		padding: 0 1rem
 
 	.main
