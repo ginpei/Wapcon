@@ -7,7 +7,7 @@
     "build-front": "cross-env NODE_ENV=production browserify -g envify -t vueify -e front/index.js -o build/front.js",
     "dev-front": "watchify -dv -t vueify -p browserify-hmr -e front/index.js -o build/front.js",
     "lint": "eslint --ext js,vue ./main.js front/**/*.js front/**/*.vue",
-    "postinstall": "mkdir build || true",
+    "postinstall": "mkdir build || echo \"However it's OK.\"",
     "run": "electron .",
     "start": "npm run lint -s & concurrently \"npm run run -s\" \"npm run dev-front -s\"",
     "test": "npm run lint -s && cross-env NODE_ENV=test mocha test/front/**/*.test.js"
