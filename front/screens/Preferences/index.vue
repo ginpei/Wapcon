@@ -9,20 +9,20 @@
 
 		main.main
 			section
-				h2.preference-heading Database
-				table.preference-table
+				SettingHeading Database
+				SettingTable
 					tr
 						th Path
 						td
-							input.preference-input(:value="$store.state.preferences.databasePath" readonly)
+							SettingInput(:value="$store.state.preferences.databasePath" readonly)
 					tr
 						th Reset
 						td
 							GIconButton(icon="exclamation-triangle") Delete all
 
 			section
-				h2.preference-heading WordPress
-				table.preference-table
+				SettingHeading WordPress
+				SettingTable
 					tr
 						th Path
 						td
@@ -35,8 +35,8 @@
 								|  WordPress.org
 
 			section
-				h2.preference-heading Data
-				table.preference-table
+				SettingHeading Data
+				SettingTable
 					tr
 						th Reset
 						td
@@ -68,37 +68,22 @@
 		padding: 1em
 		max-width: 600px
 		margin: 0 auto
-
-	.preference-heading
-		background-color: #eee
-		color: #333
-		font-family: sans-serif
-		font-size: 1em
-		font-weight: normal
-		padding: .5em 1em
-
-	.preference-table
-		width: 100%
-
-		& > tr > th
-			font-weight: normal
-			padding: .5em 1em
-			text-align: left
-			width: 50%
-
-	.preference-input
-		box-sizing: border-box
-		width: 100%
 </style>
 
 <script>
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
+	const SettingHeading = require('../../components/settings/SettingHeading.vue')
+	const SettingInput = require('../../components/settings/SettingInput.vue')
+	const SettingTable = require('../../components/settings/SettingTable.vue')
 
 	module.exports = {
 		components: {
 			BaseLayout,
 			GIconButton,
+			SettingHeading,
+			SettingInput,
+			SettingTable,
 		},
 
 		data() {
