@@ -1,22 +1,15 @@
 <template lang="pug">
-	BaseLayout
-		div.header
-			router-link(to="/")
-				i.fa.fa-arrow-left
-				| Back
-			h1 Edit
-		table
-			tbody
-				tr
-					th Path
-					td
-						input(:value="theme.path" readonly)
-				tr
-					th Name
-					td
-						input(v-model="theme.name" @input="name_onChange")
-		div
-			GIconButton(:onPress="revert_onClick" icon="undo") Revert
+	SettingLayout(title="Edit Theme Data")
+
+		SettingTable(heading="File")
+			SettingColumn(title="Path")
+				SettingInput(:value="theme.path" readonly)
+			SettingColumn(title="Name")
+				SettingInput(:value="theme.name" @input="name_onChange")
+
+		SettingTable(heading="Data")
+			SettingColumn(title="Reset")
+				GIconButton(:onPress="revert_onClick" icon="undo") Revert
 </template>
 
 <style lang="sass" scoped>
@@ -32,13 +25,21 @@
 </style>
 
 <script>
-	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
+	const {
+		SettingColumn,
+		SettingInput,
+		SettingLayout,
+		SettingTable,
+	} = require('../../components/settings/index.js')
 
 	module.exports = {
 		components: {
-			BaseLayout,
 			GIconButton,
+			SettingColumn,
+			SettingInput,
+			SettingLayout,
+			SettingTable,
 		},
 
 		data() {
@@ -62,7 +63,8 @@
 				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
 			},
 
-			name_onChange() {
+			name_onChange(event) {
+				this.theme.name = event.target.value
 				this.save()
 			},
 

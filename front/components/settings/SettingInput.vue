@@ -1,5 +1,5 @@
 <template lang="pug">
-	input.setting-input(:value="value" :readonly="readonly")
+	input.setting-input(v-model="currentValue" :readonly="readonly" @input="pathEvent")
 </template>
 
 <style lang="sass" scoped>
@@ -15,5 +15,23 @@
 			'readonly',
 			'value',
 		],
+
+		data() {
+			return {
+				currentValue: this.value,
+			}
+		},
+
+		watch: {
+			value(value) {
+				this.currentValue = value
+			},
+		},
+
+		methods: {
+			pathEvent(event) {
+				this.$emit(event.type, event)
+			},
+		},
 	}
 </script>
