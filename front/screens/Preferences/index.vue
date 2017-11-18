@@ -23,7 +23,6 @@
 </style>
 
 <script>
-	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 	const {
 		SettingColumn,
@@ -34,7 +33,6 @@
 
 	module.exports = {
 		components: {
-			BaseLayout,
 			GIconButton,
 			SettingColumn,
 			SettingInput,
