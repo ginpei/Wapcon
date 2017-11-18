@@ -41,10 +41,12 @@
 <script>
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
-	const SettingHeading = require('../../components/settings/SettingHeading.vue')
-	const SettingInput = require('../../components/settings/SettingInput.vue')
-	const SettingLayout = require('../../components/settings/SettingLayout.vue')
-	const SettingTable = require('../../components/settings/SettingTable.vue')
+	const {
+		SettingHeading,
+		SettingInput,
+		SettingLayout,
+		SettingTable,
+	} = require('../../components/settings/index.js')
 
 	module.exports = {
 		components: {
