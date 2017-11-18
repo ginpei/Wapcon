@@ -11,26 +11,20 @@
  *
  * @example
  * SettingLayout(title="Preferences")
- *   section
- *     SettingHeading Database
- *     SettingTable
- *       tr
- *         th Path
- *         td
- *           SettingInput(:value="$store.state.preferences.databasePath" readonly)
- *       tr
- *         th Reset
- *         td
- *           GIconButton(icon="exclamation-triangle") Delete all
+ *   SettingTable(heading="Database")
+ *     SettingColumn(title="Path")
+ *       SettingInput(:value="$store.state.preferences.databasePath" readonly)
+ *     SettingColumn(title="Reset")
+ *       GIconButton(icon="exclamation-triangle") Delete all
  */
 
-const SettingHeading = require('./SettingHeading.vue')
+const SettingColumn = require('./SettingColumn.vue')
 const SettingInput = require('./SettingInput.vue')
 const SettingLayout = require('./SettingLayout.vue')
 const SettingTable = require('./SettingTable.vue')
 
 module.exports = {
-	SettingHeading,
+	SettingColumn,
 	SettingInput,
 	SettingLayout,
 	SettingTable,
