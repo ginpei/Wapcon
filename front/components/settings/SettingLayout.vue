@@ -25,6 +25,7 @@
 
 	.back
 		background-color: #efe
+		border: 1px solid #060
 		color: #060
 		display: inline-block
 		padding: .5em 1em
