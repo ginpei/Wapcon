@@ -65,23 +65,12 @@
 </style>
 
 <script>
-	const { mapState } = require('vuex')
-
-	const BaseLayout = require('../../components/BaseLayout/index.vue')
-	const MachineColumn = require('./MachineColumn.vue')
-	const ThemeColumn = require('./ThemeColumn.vue')
-
 	const GSwitch = require('../../components/form/GSwitch.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 	const ThemeItem = require('./ThemeItem.vue')
 
-	const dialog = require('../../lib/dialog.js')
-
 	module.exports = {
 		components: {
-			BaseLayout,
-			ThemeColumn,
-			MachineColumn,
 			GIconButton,
 			GSwitch,
 			ThemeItem,
