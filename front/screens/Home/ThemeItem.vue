@@ -3,6 +3,7 @@
 		img.thumbnail(:src="thumbnailUrl")
 		div.hoverItem.overlay
 		div.hoverItem.controlPanel
+			GIconButton.control(:onPress="remove_onClick" title="Remove" icon="trash")
 			GIconButton.control(:onPress="open_onClick" title="Open folder" icon="folder-open-o")
 			GIconButton.control(:onPress="edit_onClick" title="Edit" icon="pencil")
 			GIconButton.control(v-if="theme.enabled" :onPress="disable_onClick" title="Disable" icon="ban")
@@ -65,6 +66,7 @@
 	.controlPanel
 		position: absolute
 		right: 0
+		text-align: right
 		top: 0
 
 </style>
@@ -101,6 +103,10 @@
 		},
 
 		methods: {
+			remove_onClick() {
+				this.$store.dispatch('preferences/removeThemes', { themeIds: [this.theme.id] })
+			},
+
 			open_onClick() {
 				bridge('openDirectory', { dirPath: this.theme.path })
 			},
