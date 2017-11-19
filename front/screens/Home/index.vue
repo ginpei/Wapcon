@@ -1,19 +1,67 @@
 <template lang="pug">
-	BaseLayout.row
-		ThemeColumn.item.main
-		MachineColumn.item.aside(:working="$store.getters['machine/working']" :running="$store.state.machine.running" :onToggleMachine="onToggleMachine")
+	.baseLayout
+
+		section.baseLayout-section
+			h1 Machine
+
+			div.machine-controlPanel
+				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
+
+			div.machineControlPanel
+				div.machineControlPanel-switch
+					GSwitch
+					div
+						select(disabled)
+							option(selected) My WordPress
+							option あのお仕事
+							option WordPress 3.2.3
+				div.machineControlPanel-info
+					div
+						a(:class="linkClasses" href="http://localhost") http://localhost
+
+		section.baseLayout-section
+			h1 Themes
+
+			div.theme-controlPanel
+				GIconButton(:onPress="noop" title="Refresh" icon="refresh")
+				GIconButton(:onPress="noop" title="Add" icon="plus")
+
+			div.theme-list
+				div(v-show="enabledThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in enabledThemes" :theme="theme")
+
+			h2 Disabled themes
+			div.theme-list
+				div(v-show="disabledThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in disabledThemes" :theme="theme")
+
 </template>
 
 <style lang="sass" scoped>
-	.row
-		display: flex
+	@mixin borderedText($color)
+		text-shadow: 1px 1px 0 $color, 1px -1px 0 $color, -1px 1px 0 $color, -1px -1px 0 $color
 
-	.item.main
-		flex: 1
-		padding: 8px 0 8px 8px
+	.baseLayout
 
-	.item.aside
-		padding: 8px
+	h1,
+	h2
+		margin: 0
+
+	.baseLayout-section
+		margin: 1rem
+
+	.machine-controlPanel
+		text-align: right
+		margin-bottom: 1rem
+
+	.machineControlPanel
+		display: grid
+		grid-template-columns: 50% 50%
+
+	.theme-controlPanel
+		text-align: right
+		margin-bottom: 1rem
+
 </style>
 
 <script>
@@ -21,25 +69,81 @@
 	const MachineColumn = require('./MachineColumn.vue')
 	const ThemeColumn = require('./ThemeColumn.vue')
 
+	const GSwitch = require('../../components/form/GSwitch.vue')
+	const GIconButton = require('../../components/form/GIconButton.vue')
+	const ThemeItem = require('./ThemeItem.vue')
+
+	const dialog = require('../../lib/dialog.js')
+
+	const themes = [
+		{
+			enabled: true,
+			id: 'https://ts.w.org/wp-content/themes/twentyseventeen/screenshot.png?ver=1.4',
+			imageUrl: 'https://ts.w.org/wp-content/themes/twentyseventeen/screenshot.png?ver=1.4',
+			name: 'Twenty Seventeen',
+		},
+		{
+			enabled: true,
+			id: 'hehe',
+			imageUrl: '',
+			name: '[WIP] My Greatest Theme',
+		},
+		{
+			enabled: false,
+			id: 'https://ts.w.org/wp-content/themes/vicem/screenshot.png?ver=1.0.5',
+			imageUrl: 'https://ts.w.org/wp-content/themes/vicem/screenshot.png?ver=1.0.5',
+			name: 'Vicem',
+		},
+		{
+			enabled: true,
+			id: 'https://ts.w.org/wp-content/themes/seos-video/screenshot.png?ver=1.4.0',
+			imageUrl: 'https://ts.w.org/wp-content/themes/seos-video/screenshot.png?ver=1.4.0',
+			name: 'Elit autem autem ex voluptatem ほげほげ delectus 🍣',
+		},
+	]
+
 	module.exports = {
 		components: {
 			BaseLayout,
 			ThemeColumn,
 			MachineColumn,
+			GIconButton,
+			GSwitch,
+			ThemeItem,
 		},
 
 		data() {
 			return {
-				name: 'Wapcon',
+				running: false,
+				themes: themes,
 			}
 		},
 
+		computed: {
+			linkClasses() {
+				return {
+					disabled: !this.running,
+				}
+			},
+
+			enabledThemes() {
+				return this.themes.filter(theme => theme.enabled)
+			},
+
+			disabledThemes() {
+				return this.themes.filter(theme => !theme.enabled)
+			},
+		},
+
 		created() {
-			this.updateMachineStatus()
-			this.$store.dispatch('preferences/load')
+			// this.updateMachineStatus()
+			// this.$store.dispatch('preferences/load')
 		},
 
 		methods: {
+			noop() {
+			},
+
 			updateMachineStatus() {
 				this.$store.dispatch('machine/updateStatus')
 			},
@@ -55,6 +159,10 @@
 				else {
 					this.$store.dispatch('machine/stop')
 				}
+			},
+
+			preferences_oncClick() {
+				this.$router.push('/preferences')
 			},
 		},
 	}
