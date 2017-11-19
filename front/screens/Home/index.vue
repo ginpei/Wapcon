@@ -9,7 +9,7 @@
 
 			div.machineControlPanel
 				div.machineControlPanel-switch
-					GSwitch
+					GSwitch(:on="machineRunning" :executing="machineWorking" :onClick="onToggleMachine")
 					// div
 						select(disabled)
 							option(selected) My WordPress
@@ -93,10 +93,10 @@
 			}
 		},
 
-		computed: Object.assign({
+		computed: {
 			linkClasses() {
 				return {
-					disabled: !this.running,
+					disabled: !this.machineRunning,
 				}
 			},
 
@@ -108,13 +108,22 @@
 				return this.themes.filter(theme => !theme.enabled)
 			},
 
-		}, mapState({
-			themes: state => state.preferences.themeList,
-		})),
+			themes() {
+				return this.$store.state.preferences.themeList
+			},
+
+			machineRunning() {
+				return this.$store.state.machine.running
+			},
+
+			machineWorking() {
+				return this.$store.getters['machine/working']
+			},
+		},
 
 		created() {
-			// this.updateMachineStatus()
-			// this.$store.dispatch('preferences/load')
+			this.updateMachineStatus()
+			this.$store.dispatch('preferences/load')
 		},
 
 		methods: {
