@@ -1,37 +1,124 @@
 <template lang="pug">
-	BaseLayout.row
-		ThemeColumn.item.main
-		MachineColumn.item.aside(:working="$store.getters['machine/working']" :running="$store.state.machine.running" :onToggleMachine="onToggleMachine")
+	.baseLayout
+
+		section.baseLayout-section
+			h1 Machine
+
+			div.machine-controlPanel
+				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
+
+			div.machineControlPanel
+				div.machineControlPanel-switch
+					GSwitch(:on="machineRunning" :executing="machineWorking" :onClick="onToggleMachine")
+					// div
+						select(disabled)
+							option(selected) My WordPress
+							option あのお仕事
+							option WordPress 3.2.3
+				div.machineControlPanel-info
+					div
+						a(:class="linkClasses" href="http://localhost") http://localhost
+
+		section.baseLayout-section
+			h1 Themes
+
+			div.theme-controlPanel
+				GIconButton(:onPress="noop" title="Refresh" icon="refresh")
+				GIconButton(:onPress="noop" title="Add" icon="plus")
+
+			div.theme-list
+				div(v-show="enabledThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in enabledThemes" :theme="theme")
+
+			h2 Disabled themes
+			div.theme-list
+				div(v-show="disabledThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in disabledThemes" :theme="theme")
+
 </template>
 
 <style lang="sass" scoped>
-	.row
-		display: flex
+	@mixin borderedText($color)
+		text-shadow: 1px 1px 0 $color, 1px -1px 0 $color, -1px 1px 0 $color, -1px -1px 0 $color
 
-	.item.main
-		flex: 1
-		padding: 8px 0 8px 8px
+	.baseLayout
 
-	.item.aside
-		padding: 8px
+	h1,
+	h2
+		margin: 0
+
+	.baseLayout-section
+		margin: 1rem
+
+	.machine-controlPanel
+		text-align: right
+		margin-bottom: 1rem
+
+	.machineControlPanel
+		display: grid
+		grid-template-columns: 50% 50%
+
+	.theme-controlPanel
+		text-align: right
+		margin-bottom: 1rem
+
 </style>
 
 <script>
+	const { mapState } = require('vuex')
+
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 	const ThemeColumn = require('./ThemeColumn.vue')
+
+	const GSwitch = require('../../components/form/GSwitch.vue')
+	const GIconButton = require('../../components/form/GIconButton.vue')
+	const ThemeItem = require('./ThemeItem.vue')
+
+	const dialog = require('../../lib/dialog.js')
 
 	module.exports = {
 		components: {
 			BaseLayout,
 			ThemeColumn,
 			MachineColumn,
+			GIconButton,
+			GSwitch,
+			ThemeItem,
 		},
 
 		data() {
 			return {
-				name: 'Wapcon',
+				running: false,
 			}
+		},
+
+		computed: {
+			linkClasses() {
+				return {
+					disabled: !this.machineRunning,
+				}
+			},
+
+			enabledThemes() {
+				return this.themes.filter(theme => theme.enabled)
+			},
+
+			disabledThemes() {
+				return this.themes.filter(theme => !theme.enabled)
+			},
+
+			themes() {
+				return this.$store.state.preferences.themeList
+			},
+
+			machineRunning() {
+				return this.$store.state.machine.running
+			},
+
+			machineWorking() {
+				return this.$store.getters['machine/working']
+			},
 		},
 
 		created() {
@@ -55,6 +142,10 @@
 				else {
 					this.$store.dispatch('machine/stop')
 				}
+			},
+
+			preferences_oncClick() {
+				this.$router.push('/preferences')
 			},
 		},
 	}

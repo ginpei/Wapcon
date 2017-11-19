@@ -1,3 +1,5 @@
+<!-- TODO remove this file -->
+
 <template lang="pug">
 	div.container
 		GHeading.heading Themes
