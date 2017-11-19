@@ -25,7 +25,7 @@
 
 			div.theme-toolbar
 				GIconButton(:onPress="noop" title="Refresh" icon="refresh")
-				GIconButton(:onPress="noop" title="Add" icon="plus")
+				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 
 			div.theme-list
 				div(v-show="enabledThemes.length < 1") (None)
@@ -147,6 +147,10 @@
 				}
 			},
 
+			addThemePath(themePath) {
+				this.$store.dispatch('preferences/addThemePath', { themePath })
+			},
+
 			seeErrors_oncClick() {
 				dialog.inform(this.machineErrorMessage, { buttons: ['Close', 'Clear'] })
 					.then(buttonIndex => {
@@ -159,6 +163,20 @@
 			preferences_oncClick() {
 				this.$router.push('/preferences')
 			},
+
+			add_onClick() {
+				dialog.showOpenDialog({ properties: ['openDirectory'] })
+					.then(result => {
+						// cancelled
+						if (!result) {
+							return
+						}
+
+						const path = result[0]
+						this.addThemePath(path)
+					})
+			},
+
 		},
 	}
 </script>
