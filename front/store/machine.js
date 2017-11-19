@@ -50,7 +50,7 @@ module.exports = {
 					commit('SET_RUNNING', { running: status.running })
 
 					// some are running, others are not running
-					if (!status.running && (status.db || status.php || status.www)) {
+					if (!status.running && (status.db || status.wp)) {
 						dispatch('stop')
 					}
 				})
@@ -62,7 +62,7 @@ module.exports = {
 			bridge('startMachine', rootState.preferences)
 				.then(status => {
 					const errors = []
-					;['db', 'php', 'www'].forEach(type => {
+					;['db', 'wp'].forEach(type => {
 						const row = status[type]
 						if (row.code !== 0) {
 							const errorResult = row.result[row.result.length - 1]

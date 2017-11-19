@@ -14,12 +14,11 @@ function checkMachinStatus(event, arg) {
 				if (firstOutput) {
 					const lines = firstOutput.text.split('\n')
 					status.db = lines.some(v => v === 'wapcon-db')
-					status.php = lines.some(v => v === 'wapcon-php')
-					status.www = lines.some(v => v === 'wapcon-www')
+					status.wp = lines.some(v => v === 'wapcon-wp')
 				}
 			}
 
-			status.running = Boolean(status.db && status.php && status.www)
+			status.running = Boolean(status.db && status.wp)
 			return status
 		})
 }
@@ -30,14 +29,10 @@ function startMachine(event, preferences) {
 	return startDb(arg)
 		.then(result => {
 			results.db = result
-			return startPhp(arg)
+			return startWordPress(arg)
 		})
 		.then(result => {
-			results.php = result
-			return startWww(arg)
-		})
-		.then(result => {
-			results.www = result
+			results.wp = result
 			return results
 		})
 		.catch(error => {
@@ -70,8 +65,7 @@ function stopMachine(event, arg) {
 	console.log('stopMachine')
 	return Promise.all([
 		stopDb(),
-		stopPhp(),
-		stopWww(),
+		stopWordPress(),
 	])
 }
 
@@ -84,7 +78,7 @@ function startDb({ databasePath }) {
 		'--name wapcon-db',
 		'--env-file ./machine-env',
 		`-v ${databasePath}:/var/lib/mysql`,
-		'ginpei/wapcon-db',
+		'mysql',
 	].join(' ')
 	return run(command)
 }
@@ -94,46 +88,25 @@ function stopDb() {
 	return run(command)
 }
 
-function startPhp({ wordpressPath, themeVolumeOptions }) {
+function startWordPress({ wordpressPath, themeVolumeOptions }) {
 	const command = [
 		'docker',
 		'run',
 		'-d',
 		'--rm',
-		'--name', 'wapcon-php',
+		'--name', 'wapcon-wp',
 		'--link', 'wapcon-db:db',
 		'--env-file', './machine-env',
-		'-p', '9000:9000',
-		'-v', `${wordpressPath}:/var/www/html`,
-		...themeVolumeOptions,
-		'ginpei/wapcon-php',
-	]
-	return run(command)
-}
-
-function stopPhp() {
-	const command = 'docker stop wapcon-php'
-	return run(command)
-}
-
-function startWww({ wordpressPath, themeVolumeOptions }) {
-	const command = [
-		'docker',
-		'run',
-		'-d',
-		'--rm',
-		'--name', 'wapcon-www',
-		'--link', 'wapcon-php:php',
 		'-p', '80:80',
 		'-v', `${wordpressPath}:/var/www/html`,
 		...themeVolumeOptions,
-		'ginpei/wapcon-www',
+		'wordpress',
 	]
 	return run(command)
 }
 
-function stopWww() {
-	const command = 'docker stop wapcon-www'
+function stopWordPress() {
+	const command = 'docker stop wapcon-wp'
 	return run(command)
 }
 
