@@ -5,6 +5,7 @@
 			h1 Machine
 
 			div.machine-toolbar
+				GIconButton(v-show="machineFailed" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
 				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 
 			div.machine-controlPanel
@@ -65,6 +66,7 @@
 </style>
 
 <script>
+	const dialog = require('../../lib/dialog.js')
 	const GSwitch = require('../../components/form/GSwitch.vue')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 	const ThemeItem = require('./ThemeItem.vue')
@@ -108,6 +110,18 @@
 			machineWorking() {
 				return this.$store.getters['machine/working']
 			},
+
+			machineFailed() {
+				return this.$store.getters['machine/failed']
+			},
+
+			machineErrorMessage() {
+				const errors = this.$store.state.machine.errors
+				const message =
+					'Error:\n\n' +
+					errors.map(v => `${v.type}: ${v.text}`).join('\n')
+				return message
+			},
 		},
 
 		created() {
@@ -133,6 +147,15 @@
 				}
 			},
 
+			seeErrors_oncClick() {
+				dialog.inform(this.machineErrorMessage, { buttons: ['Close', 'Clear'] })
+					.then(buttonIndex => {
+						// clear
+						if (buttonIndex === 1) {
+							this.$store.dispatch('machine/clearErrors')
+						}
+					})
+			},
 			preferences_oncClick() {
 				this.$router.push('/preferences')
 			},
