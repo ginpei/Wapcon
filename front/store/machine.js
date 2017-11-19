@@ -70,6 +70,7 @@ module.exports = {
 						}
 					})
 					commit('ADD_ERRORS', { errors })
+					errors.forEach(error => console.error(`[${error.type}]`, error.text))
 
 					commit('FINISH_WORKING')
 					dispatch('updateStatus')

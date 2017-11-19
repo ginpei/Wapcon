@@ -33,7 +33,7 @@ module.exports = function command(command, callback = noop) {
 
 		cmd.stderr.on('data', data => {
 			const text = data.toString()
-			// console.log('ERR', text);
+			console.log('ERR', text);
 			const output = {
 				text: text,
 				type: 'stderr',
