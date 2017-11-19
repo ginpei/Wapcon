@@ -116,4 +116,8 @@ module.exports = {
 		bridge('startMachine', startMachine)
 		bridge('stopMachine', stopMachine)
 	},
+
+	functions: {
+		createArgFromPreferences,
+	},
 }
