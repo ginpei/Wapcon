@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const spawn = require('child_process').spawn
 
@@ -25,6 +26,7 @@ function checkMachinStatus(event, arg) {
 
 function startMachine(event, preferences) {
 	const arg = createArgFromPreferences(preferences)
+	removeOldThemeDirectories(arg.wordpressPath)
 	const results = {}
 	return startDb(arg)
 		.then(result => {
@@ -47,9 +49,6 @@ function createArgFromPreferences(preferences) {
 		wordpressPath: path.resolve(preferences.wordpressPath),
 	}
 
-	// TODO remove old volume directories;
-	// empty directories are created and won't be removed
-	// (e.g. ~/mywp/wp-content/themes/wapcon-123)
 	arg.themeVolumeOptions = preferences.themeList.reduce((array, theme, index) => {
 		const hostPath = path.resolve(theme.path)  // TODO validate
 		const containerPath = `/var/www/html/wp-content/themes/wapcon-${index}`  // TODO check what if change current theme's order
@@ -59,6 +58,15 @@ function createArgFromPreferences(preferences) {
 	}, [])
 
 	return arg
+}
+
+function removeOldThemeDirectories(wordpressPath) {
+	const themeDirectory = `${wordpressPath}/wp-content/themes`
+	fs.readdirSync(themeDirectory).forEach((fname) =>{
+		if (fname.startsWith('wapcon-')) {
+			fs.rmdirSync(`${themeDirectory}/${fname}`)
+		}
+	})
 }
 
 function stopMachine(event, arg) {
@@ -119,5 +127,6 @@ module.exports = {
 
 	functions: {
 		createArgFromPreferences,
+		removeOldThemeDirectories,
 	},
 }
