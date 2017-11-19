@@ -65,6 +65,8 @@
 </style>
 
 <script>
+	const { mapState } = require('vuex')
+
 	const BaseLayout = require('../../components/BaseLayout/index.vue')
 	const MachineColumn = require('./MachineColumn.vue')
 	const ThemeColumn = require('./ThemeColumn.vue')
@@ -74,33 +76,6 @@
 	const ThemeItem = require('./ThemeItem.vue')
 
 	const dialog = require('../../lib/dialog.js')
-
-	const themes = [
-		{
-			enabled: true,
-			id: 'https://ts.w.org/wp-content/themes/twentyseventeen/screenshot.png?ver=1.4',
-			imageUrl: 'https://ts.w.org/wp-content/themes/twentyseventeen/screenshot.png?ver=1.4',
-			name: 'Twenty Seventeen',
-		},
-		{
-			enabled: true,
-			id: 'hehe',
-			imageUrl: '',
-			name: '[WIP] My Greatest Theme',
-		},
-		{
-			enabled: false,
-			id: 'https://ts.w.org/wp-content/themes/vicem/screenshot.png?ver=1.0.5',
-			imageUrl: 'https://ts.w.org/wp-content/themes/vicem/screenshot.png?ver=1.0.5',
-			name: 'Vicem',
-		},
-		{
-			enabled: true,
-			id: 'https://ts.w.org/wp-content/themes/seos-video/screenshot.png?ver=1.4.0',
-			imageUrl: 'https://ts.w.org/wp-content/themes/seos-video/screenshot.png?ver=1.4.0',
-			name: 'Elit autem autem ex voluptatem ほげほげ delectus 🍣',
-		},
-	]
 
 	module.exports = {
 		components: {
@@ -115,11 +90,10 @@
 		data() {
 			return {
 				running: false,
-				themes: themes,
 			}
 		},
 
-		computed: {
+		computed: Object.assign({
 			linkClasses() {
 				return {
 					disabled: !this.running,
@@ -133,7 +107,10 @@
 			disabledThemes() {
 				return this.themes.filter(theme => !theme.enabled)
 			},
-		},
+
+		}, mapState({
+			themes: state => state.preferences.themeList,
+		})),
 
 		created() {
 			// this.updateMachineStatus()
@@ -141,9 +118,6 @@
 		},
 
 		methods: {
-			noop() {
-			},
-
 			updateMachineStatus() {
 				this.$store.dispatch('machine/updateStatus')
 			},

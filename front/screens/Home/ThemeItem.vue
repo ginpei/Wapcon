@@ -3,8 +3,8 @@
 		img.thumbnail(:src="thumbnailUrl")
 		div.hoverItem.overlay
 		div.hoverItem.controlPanel
-			GIconButton.control(title="Open folder" icon="folder-open-o")
-			GIconButton.control(title="Edit" icon="pencil")
+			GIconButton.control(:onPress="open_onClick" title="Open folder" icon="folder-open-o")
+			GIconButton.control(:onPress="edit_onClick" title="Edit" icon="pencil")
 			GIconButton.control(v-if="theme.enabled" :onPress="disable_onClick" title="Disable" icon="ban")
 			GIconButton.control(v-if="!theme.enabled" :onPress="enable_onClick" title="Enable" icon="superpowers")
 		span.name {{theme.name}}
@@ -70,6 +70,7 @@
 </style>
 
 <script>
+	const bridge = require('../../lib/bridge.js')
 	const GIconButton = require('../../components/form/GIconButton.vue')
 
 	module.exports = {
@@ -100,6 +101,14 @@
 		},
 
 		methods: {
+			open_onClick() {
+				bridge('openDirectory', { dirPath: this.theme.path })
+			},
+
+			edit_onClick() {
+				this.$router.push(`/themes/${this.theme.id}/edit`)
+			},
+
 			enable_onClick() {
 				this.theme.enabled = true
 			},
