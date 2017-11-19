@@ -10,7 +10,7 @@
 			div.machineControlPanel
 				div.machineControlPanel-switch
 					GSwitch
-					div
+					// div
 						select(disabled)
 							option(selected) My WordPress
 							option あのお仕事
