@@ -19,7 +19,7 @@ describe('back/docker', () => {
 			result = functions.createArgFromPreferences({
 				databasePath: 'user/db',
 				themeList: [
-					{ path: '~/my-great-theme' },
+					{ id: '123', path: '~/my-great-theme' },
 				],
 				wordpressPath: 'user/wp',
 			})
@@ -40,7 +40,7 @@ describe('back/docker', () => {
 		it('returns `-v` options', () => {
 			expect(result.themeVolumeOptions.length).to.equal(2)
 			expect(result.themeVolumeOptions[0]).to.equal('-v')
-			expect(result.themeVolumeOptions[1]).to.equal('/home/foo/my-great-theme:/var/www/html/wp-content/themes/wapcon-0')
+			expect(result.themeVolumeOptions[1]).to.equal('/home/foo/my-great-theme:/var/www/html/wp-content/themes/wapcon-123')
 		})
 	})
 

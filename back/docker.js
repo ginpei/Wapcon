@@ -49,9 +49,9 @@ function createArgFromPreferences(preferences) {
 		wordpressPath: path.resolve(preferences.wordpressPath),
 	}
 
-	arg.themeVolumeOptions = preferences.themeList.reduce((array, theme, index) => {
+	arg.themeVolumeOptions = preferences.themeList.reduce((array, theme) => {
 		const hostPath = path.resolve(theme.path)  // TODO validate
-		const containerPath = `/var/www/html/wp-content/themes/wapcon-${index}`  // TODO check what if change current theme's order
+		const containerPath = `/var/www/html/wp-content/themes/wapcon-${theme.id}`
 		array.push('-v')
 		array.push(`${hostPath}:${containerPath}`)
 		return array
