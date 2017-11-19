@@ -4,7 +4,7 @@
 		section.baseLayout-section
 			h1 Machine
 
-			div.machine-controlPanel
+			div.machine-toolbar
 				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 
 			div.machineControlPanel
@@ -22,7 +22,7 @@
 		section.baseLayout-section
 			h1 Themes
 
-			div.theme-controlPanel
+			div.theme-toolbar
 				GIconButton(:onPress="noop" title="Refresh" icon="refresh")
 				GIconButton(:onPress="noop" title="Add" icon="plus")
 
@@ -50,7 +50,7 @@
 	.baseLayout-section
 		margin: 1rem
 
-	.machine-controlPanel
+	.machine-toolbar
 		text-align: right
 		margin-bottom: 1rem
 
@@ -58,7 +58,7 @@
 		display: grid
 		grid-template-columns: 50% 50%
 
-	.theme-controlPanel
+	.theme-toolbar
 		text-align: right
 		margin-bottom: 1rem
 
