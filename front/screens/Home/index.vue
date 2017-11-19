@@ -24,7 +24,7 @@
 			h1 Themes
 
 			div.theme-toolbar
-				GIconButton(:onPress="noop" title="Refresh" icon="refresh")
+				GIconButton(:onPress="refresh_onClick" title="Refresh" icon="refresh")
 				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 
 			div.theme-list
@@ -162,6 +162,10 @@
 			},
 			preferences_oncClick() {
 				this.$router.push('/preferences')
+			},
+
+			refresh_onClick() {
+				// TODO
 			},
 
 			add_onClick() {
