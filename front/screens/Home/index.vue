@@ -29,12 +29,12 @@
 
 			div.theme-list
 				div(v-show="enabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in enabledThemes" @click="themeItem_onClick" :theme="theme")
+				ThemeItem.theme-item(v-for="theme in enabledThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
 
 			h2 Disabled themes
 			div.theme-list
 				div(v-show="disabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in disabledThemes" @click="themeItem_onClick" :theme="theme" :selected="isSelectedTheme(theme)")
+				ThemeItem.theme-item(v-for="theme in disabledThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
 
 </template>
 

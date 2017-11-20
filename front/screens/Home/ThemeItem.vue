@@ -136,7 +136,16 @@
 		},
 
 		methods: {
+			save() {
+				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
+			},
+
 			onClick(event) {
+				// do nothing if users intended another
+				if (event.target.closest('button')) {
+					return
+				}
+
 				this.$emit('click', event, this.theme)
 			},
 
@@ -154,10 +163,12 @@
 
 			enable_onClick() {
 				this.theme.enabled = true
+				this.save()
 			},
 
 			disable_onClick() {
 				this.theme.enabled = false
+				this.save()
 			},
 		},
 	}
