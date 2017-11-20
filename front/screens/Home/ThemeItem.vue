@@ -1,7 +1,9 @@
 <template lang="pug">
-	div.ThemeItem(:class="classes")
+	div.ThemeItem(@click="onClick" :class="classes" :data-selected="selected")
 		img.thumbnail(:src="thumbnailUrl")
-		div.hoverItem.overlay
+		div.hoverItem.hoverOverlay
+		div.checkedOverlay
+			i.fa.fa-check.icon(aria-hidden="true")
 		div.hoverItem.controlPanel
 			GIconButton.control(:onPress="remove_onClick" title="Remove" icon="trash")
 			GIconButton.control(:onPress="open_onClick" title="Open folder" icon="folder-open-o")
@@ -19,8 +21,6 @@
 	.ThemeItem
 		--duration: 200ms
 
-		border: 1px solid #ddd
-		box-sizing: border-box
 		display: inline-block
 		height: 150px
 		margin: 0 1em 1em 0
@@ -29,6 +29,8 @@
 		width: 200px
 
 	.thumbnail
+		border: 1px solid #ddd
+		box-sizing: border-box
 		height: 100%
 		transition: filter var(--duration)
 		width: 100%
@@ -46,7 +48,7 @@
 		.ThemeItem:hover &
 			opacity: 1
 
-	.overlay
+	.hoverOverlay
 		background-color: rgba(0,0,0,0.3)
 		height: 100%
 		left: 0
@@ -54,6 +56,36 @@
 		position: absolute
 		top: 0
 		width: 100%
+
+	.checkedOverlay
+		--color: #9c9
+		--border-width: 0.5em
+
+		border: var(--border-width) solid var(--color)
+		box-sizing: border-box
+		display: none
+		height: 100%
+		left: 0
+		position: absolute
+		top: 0
+		width: 100%
+
+		.icon
+			--length: 2em
+
+			background-color: var(--color)
+			color: #fff
+			display: inline-block
+			height: var(--length)
+			left: calc(var(--border-width) * -1)
+			line-height: var(--length)
+			position: absolute
+			text-align: center
+			top: calc(var(--border-width) * -1)
+			width: var(--length)
+
+		.ThemeItem[data-selected] &
+			display: block
 
 	.name
 		@include borderedText(#fff)
@@ -81,6 +113,7 @@
 		},
 
 		props: [
+			'selected',
 			'theme',
 		],
 
@@ -103,6 +136,10 @@
 		},
 
 		methods: {
+			onClick(event) {
+				this.$emit('click', event, this.theme)
+			},
+
 			remove_onClick() {
 				this.$store.dispatch('preferences/removeThemes', { themeIds: [this.theme.id] })
 			},

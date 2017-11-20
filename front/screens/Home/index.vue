@@ -29,12 +29,12 @@
 
 			div.theme-list
 				div(v-show="enabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in enabledThemes" :theme="theme")
+				ThemeItem.theme-item(v-for="theme in enabledThemes" @click="themeItem_onClick" :theme="theme")
 
 			h2 Disabled themes
 			div.theme-list
 				div(v-show="disabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in disabledThemes" :theme="theme")
+				ThemeItem.theme-item(v-for="theme in disabledThemes" @click="themeItem_onClick" :theme="theme" :selected="isSelectedTheme(theme)")
 
 </template>
 
@@ -80,7 +80,7 @@
 
 		data() {
 			return {
-				running: false,
+				selectedThemeIds: [],
 			}
 		},
 
@@ -130,6 +130,10 @@
 		},
 
 		methods: {
+			isSelectedTheme(theme) {
+				return this.selectedThemeIds.includes(theme.id)
+			},
+
 			updateMachineStatus() {
 				this.$store.dispatch('machine/updateStatus')
 			},
@@ -181,6 +185,14 @@
 					})
 			},
 
+			themeItem_onClick(event, theme) {
+				const index = this.selectedThemeIds.indexOf(theme.id)
+				if (index >= 0) {
+					this.selectedThemeIds.splice(index, 1)
+				} else {
+					this.selectedThemeIds.push(theme.id)
+				}
+			},
 		},
 	}
 </script>
