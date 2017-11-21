@@ -24,8 +24,16 @@ function checkMachinStatus(event, arg) {
 		})
 }
 
-function startMachine(event, preferences) {
-	const arg = createArgFromPreferences(preferences)
+/**
+ * Boot docker containers.
+ * @param {Event} event
+ * @param {object} options
+ * @param {string} options.databasePath
+ * @param {string} options.wordpressPath
+ * @param {Array} options.themes
+ */
+function startMachine(event, options) {
+	const arg = createArgFromPreferences(options)
 	removeOldThemeDirectories(arg.wordpressPath)
 	const results = {}
 	return startDb(arg)

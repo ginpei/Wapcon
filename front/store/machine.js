@@ -56,10 +56,10 @@ module.exports = {
 				})
 		},
 
-		start({ rootState, commit, dispatch }) {
+		start({ rootGetters, commit, dispatch }) {
 			commit('START_WORKING')
 			commit('SET_RUNNING', { running: true })
-			bridge('startMachine', rootState.preferences)
+			bridge('startMachine', rootGetters['preferences/bootOptions'])
 				.then(status => {
 					const errors = []
 					;['db', 'wp'].forEach(type => {

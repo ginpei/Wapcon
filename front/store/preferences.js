@@ -41,6 +41,17 @@ module.exports = {
 		inactiveThemes(state) {
 			return state.themeList.filter(theme => !theme.active)
 		},
+
+		/**
+		 * Return data to boot machines.
+		 */
+		bootOptions(state, getters) {
+			return {
+				wordpressPath: state.wordpressPath,
+				databasePath: state.databasePath,
+				themeList: getters.activeThemes,
+			}
+		},
 	},
 
 	mutations: {
