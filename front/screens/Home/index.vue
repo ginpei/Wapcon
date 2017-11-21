@@ -92,11 +92,11 @@
 			},
 
 			activeThemes() {
-				return this.themes.filter(theme => theme.active)
+				return this.$store.getters['preferences/activeThemes']
 			},
 
 			inactiveThemes() {
-				return this.themes.filter(theme => !theme.active)
+				return this.$store.getters['preferences/inactiveThemes']
 			},
 
 			themes() {

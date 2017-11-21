@@ -33,6 +33,14 @@ module.exports = {
 				},
 			}
 		},
+
+		activeThemes(state) {
+			return state.themeList.filter(theme => theme.active)
+		},
+
+		inactiveThemes(state) {
+			return state.themeList.filter(theme => !theme.active)
+		},
 	},
 
 	mutations: {
