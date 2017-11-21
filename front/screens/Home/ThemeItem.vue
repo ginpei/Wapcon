@@ -8,8 +8,8 @@
 			GIconButton.control(:onPress="remove_onClick" title="Remove" icon="trash")
 			GIconButton.control(:onPress="open_onClick" title="Open folder" icon="folder-open-o")
 			GIconButton.control(:onPress="edit_onClick" title="Edit" icon="pencil")
-			GIconButton.control(v-if="theme.enabled" :onPress="disable_onClick" title="Disable" icon="ban")
-			GIconButton.control(v-if="!theme.enabled" :onPress="enable_onClick" title="Enable" icon="superpowers")
+			GIconButton.control(v-if="theme.active" :onPress="disable_onClick" title="Disable" icon="ban")
+			GIconButton.control(v-if="!theme.active" :onPress="enable_onClick" title="Enable" icon="superpowers")
 		span.name {{theme.name}}
 </template>
 
@@ -162,12 +162,12 @@
 			},
 
 			enable_onClick() {
-				this.theme.enabled = true
+				this.theme.active = true
 				this.save()
 			},
 
 			disable_onClick() {
-				this.theme.enabled = false
+				this.theme.active = false
 				this.save()
 			},
 		},

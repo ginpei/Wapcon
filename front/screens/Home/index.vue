@@ -28,13 +28,13 @@
 				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 
 			div.theme-list
-				div(v-show="enabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in enabledThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
+				div(v-show="activeThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in activeThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
 
 			h2 Disabled themes
 			div.theme-list
-				div(v-show="disabledThemes.length < 1") (None)
-				ThemeItem.theme-item(v-for="theme in disabledThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
+				div(v-show="inactiveThemes.length < 1") (None)
+				ThemeItem.theme-item(v-for="theme in inactiveThemes" @click="themeItem_onClick" :key="theme.id" :theme="theme" :selected="isSelectedTheme(theme)")
 
 </template>
 
@@ -91,12 +91,12 @@
 				}
 			},
 
-			enabledThemes() {
-				return this.themes.filter(theme => theme.enabled)
+			activeThemes() {
+				return this.themes.filter(theme => theme.active)
 			},
 
-			disabledThemes() {
-				return this.themes.filter(theme => !theme.enabled)
+			inactiveThemes() {
+				return this.themes.filter(theme => !theme.active)
 			},
 
 			themes() {
