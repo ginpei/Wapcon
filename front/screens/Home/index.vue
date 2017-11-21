@@ -189,7 +189,8 @@
 				const index = this.selectedThemeIds.indexOf(theme.id)
 				if (index >= 0) {
 					this.selectedThemeIds.splice(index, 1)
-				} else {
+				}
+				else {
 					this.selectedThemeIds.push(theme.id)
 				}
 			},
