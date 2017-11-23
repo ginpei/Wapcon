@@ -12,7 +12,7 @@ let win;
 
 function createWindow() {
 	win = new BrowserWindow({
-		height: 250,
+		height: 500,
 		width: 500,
 	});
 
