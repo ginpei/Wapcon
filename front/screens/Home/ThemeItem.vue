@@ -131,7 +131,8 @@
 
 			thumbnailUrl() {
 				const emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-				return this.theme.imageUrl || emptyImageUrl
+				const imgPath = `${this.theme.path}/screenshot.png`
+				return window.fs.existsSync(imgPath) ? imgPath : emptyImageUrl  // may cause app to freez?
 			},
 		},
 
