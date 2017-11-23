@@ -4,6 +4,7 @@ const { app, BrowserWindow } = require('electron');
 
 const dialog = require('./dialog.js')
 const docker = require('./docker.js')
+const fs = require('./fs.js')
 const misc = require('./misc.js')
 const preferences = require('./preferences.js')
 
@@ -48,6 +49,7 @@ module.exports = {
 
 		dialog.init()
 		docker.init()
+		fs.init()
 		misc.init()
 		preferences.init()
 	}

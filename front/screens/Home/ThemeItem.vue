@@ -141,9 +141,10 @@
 		},
 
 		mounted() {
-			window.fs.exists(this.originalThumbnailUrl, (existing) => {
-				this.noThumbnail = !existing
-			})
+			bridge('fs.exists', { path: this.originalThumbnailUrl })
+				.then(({ existing }) => {
+					this.noThumbnail = !existing
+				})
 		},
 
 		methods: {
