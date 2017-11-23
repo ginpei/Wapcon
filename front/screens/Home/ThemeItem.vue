@@ -38,9 +38,6 @@
 		.ThemeItem.-noThumbnail &
 			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAALElEQVQYGWO8d+/efwYkoKioiMRjYGBC4WHhUK6A8T8QIJt8//59ZC493AAAQssKpBK4F5AAAAAASUVORK5CYII=)
 
-		.ThemeItem:hover &
-			filter: blur(1px)
-
 	.hoverItem
 		opacity: 0
 		transition: opacity var(--duration)
