@@ -122,6 +122,7 @@ module.exports = {
 			const name = path.basename(themePath.replace(/\\/g, '/'))
 
 			const theme = {
+				active: true,
 				id: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
 				name: name,
 				path: themePath,
