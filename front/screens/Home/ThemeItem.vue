@@ -119,21 +119,31 @@
 
 		data() {
 			return {
+				noThumbnail: true,
 			}
 		},
 
 		computed: {
 			classes() {
 				return {
-					'-noThumbnail': !this.theme.imageUrl,
+					'-noThumbnail': this.noThumbnail,
 				}
+			},
+
+			originalThumbnailUrl() {
+				return `${this.theme.path}/screenshot.png`
 			},
 
 			thumbnailUrl() {
 				const emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-				const imgPath = `${this.theme.path}/screenshot.png`
-				return window.fs.existsSync(imgPath) ? imgPath : emptyImageUrl  // may cause app to freez?
+				return this.noThumbnail ? emptyImageUrl : this.originalThumbnailUrl
 			},
+		},
+
+		mounted() {
+			window.fs.exists(this.originalThumbnailUrl, (existing) => {
+				this.noThumbnail = !existing
+			})
 		},
 
 		methods: {
