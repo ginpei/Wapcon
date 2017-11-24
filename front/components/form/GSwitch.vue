@@ -1,38 +1,41 @@
 <template lang="pug">
-	span.switch(@click.prevent="root_onClick" :class="classes")
+	label.switch(@click.prevent="root_onClick" :data-executing="executing")
 		input.checkbox(:checked="on" type="checkbox")
 		span.label
 			span.on ON
 			span.separator
-				i.executingIndicator.fa.fa-spinner.fa-pulse(aria-hidden="true")
+				i.separator-icon.powerIcon.fa.fa-power-off(v-show="!executing" aria-hidden="true")
+				i.separator-icon.executingIndicator.fa.fa-power-off.fa-pulse(v-show="executing" aria-hidden="true")
 			span.off OFF
 </template>
 
 <style lang="sass" scoped>
-	$height: 40px
+	$height: 2.5rem
 
 	.switch
-		border-radius: $height / 2
-		border: solid 1px #999
+		border: 1px solid #999
 		display: inline-block
 		height: $height
 		overflow: hidden
 		-webkit-tap-highlight-color: transparent
 		tap-highlight-color: transparent
+		text-shadow: 1px 1px #fff
 		user-select: none
-		width: 100px
+		width: $height * 3
 
 	.checkbox
 		display: none
 
 	.label
 		cursor: pointer
-		margin-left: $height * -1.5
 		transition: margin .1s
 		white-space: nowrap
 
-	.checkbox:checked + .label
-		margin-left: 0
+		.checkbox:not(:checked) + &
+			margin-left: calc(#{$height * -2} - 1px)
+
+		.checkbox:checked + &
+			margin-left: 0
 
 	.label > *
 		vertical-align: top
@@ -43,52 +46,40 @@
 		height: $height
 		line-height: $height
 		text-align: center
+		text-shadow: 1px 1px #fff
 		width: $height * 2
 
+		.switch[data-executing] &
+			color: #999
+
 	.on
-		background-color: #090
-		background-image: linear-gradient(to bottom, hsl(120, 70%, 30%), hsl(120, 80%, 60%))
-		box-shadow: 3px 2px 10px rgba(0,0,0,.2) inset, -3px 2px 10px rgba(0,0,0,.2) inset
-		color: #fff
-		text-shadow: -1px -1px rgba(0,0,0,.3)
+		color: #060
+		background-color: #efe
+
+	.off
+		background-color: buttonface
 
 	.separator
-		background-color: #eee
-		border: solid 1px #999
-		border-radius: 50%
-		box-sizing: border-box
-		box-shadow: 1px 2px #fff inset, -1px 2px #fff inset, 1px 1px 5px rgba(0,0,0,.2)
+		background-color: buttonface
+		border-left: 1px solid #999
+		border-right: 1px solid #999
+		box-shadow: 1px 1px 1px #fff inset
 		display: inline-block
 		height: $height
 		line-height: $height
-		margin: 0 ($height / -2)
 		position: relative
 		width: $height
 
-	.off
-		background-color: #eee
-		box-shadow: 5px 5px 10px rgba(0,0,0,.2) inset
-		color: #777
-		text-shadow: 1px 1px #fff
-
-	.executingIndicator
+	.separator-icon
 		display: inline-block
 		height: $height
 		line-height: $height
 		text-align: center
-		visibility: hidden
 		width: $height
 
-	.executing
-		.executingIndicator
-			visibility: visible
-
-		.on,
-		.off
-			background-color: #eee
-			background-image: none
-			color: #999
-			text-shadow: 1px 1px #fff
+	.executingIndicator
+		color: #999
+		text-shadow: none
 
 </style>
 
@@ -99,14 +90,6 @@
 			'on',
 			'onClick',
 		],
-
-		computed: {
-			classes() {
-				return {
-					executing: this.executing,
-				}
-			},
-		},
 
 		methods: {
 			root_onClick(event) {
