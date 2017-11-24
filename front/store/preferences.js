@@ -86,6 +86,12 @@ module.exports = {
 		ADD_THEME(state, { theme }) {
 			state.themeList.push(theme)
 		},
+
+		SORT_THEME(state) {
+			state.themeList = state.themeList.sort((t1, t2) => {
+				return (t1.name > t2.name ? 1 : -1)
+			})
+		},
 	},
 
 	actions: {
@@ -104,6 +110,7 @@ module.exports = {
 		save({ getters, commit }) {
 			commit('START_WORKING')
 
+			commit('SORT_THEME')
 			bridge('savePreferences', { data: getters.data })
 				.then(data => {
 					commit('FINISH_WORKING')
