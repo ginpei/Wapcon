@@ -57,7 +57,7 @@
 		background-color: #efe
 
 	.off
-		background-color: buttonface
+		background-color: #fff
 
 	.separator
 		background-color: buttonface
