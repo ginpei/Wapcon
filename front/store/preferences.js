@@ -88,9 +88,7 @@ module.exports = {
 		},
 
 		SORT_THEME(state) {
-			state.themeList = state.themeList.sort((t1, t2) => {
-				return (t1.name > t2.name ? 1 : -1)
-			})
+			state.themeList = state.themeList.sort((t1, t2) => t1.name > t2.name ? 1 : -1)
 		},
 	},
 
