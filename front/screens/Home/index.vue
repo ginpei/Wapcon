@@ -5,7 +5,7 @@
 			h1 Machine
 
 			div.machine-toolbar
-				GIconButton(v-show="machineFailed" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
+				GIconButton.seeErrors(v-show="machineFailed" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
 				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 
 			div.machine-controlPanel
@@ -52,6 +52,11 @@
 	.machine-controlPanel
 		display: grid
 		grid-template-columns: 50% 50%
+
+	.seeErrors
+		color: #900
+		border-color: #c99
+		background-color: hsl(0, 30%, 87%)
 
 	.theme-toolbar
 		text-align: right
