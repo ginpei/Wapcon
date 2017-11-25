@@ -6,6 +6,7 @@
 <style lang="sass" scoped>
 	button
 		border: 1px solid #999
+		cursor: pointer
 		box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.9) inset
 		min-height: 30px
 		min-width: 50px
@@ -20,6 +21,7 @@
 		&:disabled
 			box-shadow: none
 			color: #999
+			cursor: default
 </style>
 
 <script>
