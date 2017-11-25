@@ -11,11 +11,6 @@
 			div.machine-controlPanel
 				div.machine-controlPanel-switch
 					GSwitch(:on="machineRunning" :executing="machineWorking" :onClick="onToggleMachine")
-					// div
-						select(disabled)
-							option(selected) My WordPress
-							option あのお仕事
-							option WordPress 3.2.3
 				div.machine-controlPanel-info
 					div
 						a(:class="linkClasses" href="http://localhost") http://localhost
@@ -24,7 +19,6 @@
 			h1 Themes
 
 			div.theme-toolbar
-				GIconButton(:onPress="refresh_onClick" title="Refresh" icon="refresh")
 				GIconButton(:onPress="add_onClick" title="Add" icon="plus")
 
 			div.theme-list
