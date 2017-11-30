@@ -59,7 +59,22 @@ module.exports = {
 		start({ rootGetters, commit, dispatch }) {
 			commit('START_WORKING')
 			commit('SET_RUNNING', { running: true })
-			bridge('startMachine', rootGetters['preferences/bootOptions'])
+
+			// TODO versions
+			const targets = [
+				'mysql:latest',
+				'wordpress:latest'
+			]
+
+			bridge('checkImageAvailabilities', { targets })
+				.then(imageAvailabilities => {
+					if (imageAvailabilities.every(v => v.available)) {
+						return bridge('startMachine', rootGetters['preferences/bootOptions'])
+					}
+					else {
+						throw new Error('Images are not ready.')
+					}
+				})
 				.then(status => {
 					const errors = []
 					;['db', 'wp'].forEach(type => {
@@ -71,6 +86,17 @@ module.exports = {
 					})
 					commit('ADD_ERRORS', { errors })
 					errors.forEach(error => console.error(`[${error.type}]`, error.text))
+
+					commit('FINISH_WORKING')
+					dispatch('updateStatus')
+				})
+				.catch(error => {
+					const errorLog = {
+						type: 'host',
+						text: error.message,
+					}
+					commit('ADD_ERRORS', { errors: [errorLog] })
+					console.error(error)
 
 					commit('FINISH_WORKING')
 					dispatch('updateStatus')

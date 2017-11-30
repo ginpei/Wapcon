@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const sinon = require('sinon')
 
+const commandRunner = require('../../../back/lib/commandRunner.js')
 const docker = require('../../../back/docker.js')
 const functions = docker.functions
 
@@ -66,6 +67,47 @@ describe('back/docker', () => {
 			expect(rmdirSyncSpy.callCount).to.equal(2)
 			expect(rmdirSyncSpy.calledWith('/path/to/wp/wp-content/themes/wapcon-0')).to.equal(true)
 			expect(rmdirSyncSpy.calledWith('/path/to/wp/wp-content/themes/wapcon-1')).to.equal(true)
+		})
+	})
+
+	describe('checkImageAvailabilities()', () => {
+		let result
+
+		beforeEach((done) => {
+			sinon.stub(commandRunner, 'run')
+
+			commandRunner.run
+				.withArgs('docker image ls --format {{.Repository}}:{{.Tag}}')
+				.returns(Promise.resolve({
+					result: [
+						{ type: 'stdout', text: 'mysql:latest\nnginx:latest\nwordpress:0.0.0' },
+					],
+				}))
+
+			const event = {}
+			const options = {
+				targets: [
+					'mysql:latest',
+					'wordpress:latest',
+				]
+			};
+			functions.checkImageAvailabilities(event, options)
+				.then(details => {
+					result = details
+					done()
+				})
+		})
+
+		afterEach(() => {
+			commandRunner.run.restore()
+		})
+
+		it('returns availabilities for specifications', () => {
+			expect(result.length).to.equal(2)
+			expect(result[0].imageKey).to.equal('mysql:latest')
+			expect(result[0].available).to.equal(true)
+			expect(result[1].imageKey).to.equal('wordpress:latest')
+			expect(result[1].available).to.equal(false)
 		})
 	})
 })
