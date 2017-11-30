@@ -3,10 +3,10 @@ const path = require('path')
 const spawn = require('child_process').spawn
 
 const bridge = require('./lib/bridge.js')
-const run = require('./lib/run.js')
+const commandRunner = require('./lib/commandRunner.js')
 
 function checkMachinStatus(event, arg) {
-	return run('docker container ls --format {{.Names}} --filter name=wapcon-')
+	return commandRunner.run('docker container ls --format {{.Names}} --filter name=wapcon-')
 		.then(({ code, result }) => {
 			const status = {}
 
@@ -96,12 +96,12 @@ function startDb({ databasePath }) {
 		`-v ${databasePath}:/var/lib/mysql`,
 		'mysql',
 	].join(' ')
-	return run(command)
+	return commandRunner.run(command)
 }
 
 function stopDb() {
 	const command = 'docker stop wapcon-db'
-	return run(command)
+	return commandRunner.run(command)
 }
 
 function startWordPress({ wordpressPath, themeVolumeOptions }) {
@@ -118,12 +118,12 @@ function startWordPress({ wordpressPath, themeVolumeOptions }) {
 		...themeVolumeOptions,
 		'wordpress',
 	]
-	return run(command)
+	return commandRunner.run(command)
 }
 
 function stopWordPress() {
 	const command = 'docker stop wapcon-wp'
-	return run(command)
+	return commandRunner.run(command)
 }
 
 module.exports = {

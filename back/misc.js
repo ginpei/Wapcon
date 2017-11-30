@@ -1,13 +1,13 @@
 const path = require('path')
 
 const bridge = require('./lib/bridge.js')
-const run = require('./lib/run.js')
+const commandRunner = require('./lib/commandRunner.js')
 
 module.exports = {
 	init() {
 		bridge('openDirectory', (event, { dirPath }) => {
 			// TODO support another environment
-			return run(`explorer ${path.resolve(dirPath)}`)
+			return commandRunner.run(`explorer ${path.resolve(dirPath)}`)
 		})
 	},
 }

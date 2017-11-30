@@ -7,7 +7,7 @@ function noop(){}
  * @param {function} [callback] Callback for each output group.
  * @returns {Promise}
  */
-module.exports = function command(command, callback = noop) {
+function run(command, callback = noop) {
 	const [entry, ...commandArgs] = command instanceof Array ? command : command.split(' ')
 	const sCommand = entry + ' ' + commandArgs.join(' ')
 	console.log('$', sCommand)
@@ -55,4 +55,8 @@ module.exports = function command(command, callback = noop) {
 			resolve({ code, result })
 		})
 	})
+}
+
+module.exports = {
+	run,
 }
