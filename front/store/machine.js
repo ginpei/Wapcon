@@ -63,17 +63,16 @@ module.exports = {
 			// TODO versions
 			const targets = [
 				'mysql:latest',
-				'wordpress:latest'
+				'wordpress:latest',
 			]
 
 			bridge('checkImageAvailabilities', { targets })
 				.then(imageAvailabilities => {
-					if (imageAvailabilities.every(v => v.available)) {
-						return bridge('startMachine', rootGetters['preferences/bootOptions'])
-					}
-					else {
+					if (!imageAvailabilities.every(v => v.available)) {
 						throw new Error('Images are not ready.')
 					}
+
+					return bridge('startMachine', rootGetters['preferences/bootOptions'])
 				})
 				.then(status => {
 					const errors = []
