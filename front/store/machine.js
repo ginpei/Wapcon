@@ -66,10 +66,13 @@ module.exports = {
 				'wordpress:latest',
 			]
 
-			bridge('checkImageAvailabilities', { targets })
+			Promise.all(targets.map(v => bridge('checkImageAvailability', v)))
 				.then(imageAvailabilities => {
 					if (!imageAvailabilities.every(v => v.available)) {
-						throw new Error('Images are not ready.')
+						const unavailables = imageAvailabilities
+							.filter(v => !v.available)
+							.map(v => `${v.repository}:${v.tag}`)
+						throw new Error('Images are not ready: ' + unavailables.join(', '))
 					}
 
 					return bridge('startMachine', rootGetters['preferences/bootOptions'])

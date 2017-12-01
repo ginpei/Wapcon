@@ -70,44 +70,66 @@ describe('back/docker', () => {
 		})
 	})
 
-	describe('checkImageAvailabilities()', () => {
+	describe('checkImageAvailability()', () => {
+		const event = {}
 		let result
 
-		beforeEach((done) => {
+		beforeEach(() => {
 			sinon.stub(commandRunner, 'run')
 
 			commandRunner.run
 				.withArgs('docker image ls --format {{.Repository}}:{{.Tag}}')
 				.returns(Promise.resolve({
 					result: [
-						{ type: 'stdout', text: 'mysql:latest\nnginx:latest\nwordpress:0.0.0' },
+						{ type: 'stdout', text: 'mysql:latest\nwordpress:latest' },
 					],
 				}))
-
-			const event = {}
-			const options = {
-				targets: [
-					'mysql:latest',
-					'wordpress:latest',
-				]
-			};
-			functions.checkImageAvailabilities(event, options)
-				.then(details => {
-					result = details
-					done()
-				})
 		})
 
 		afterEach(() => {
 			commandRunner.run.restore()
 		})
 
-		it('returns availabilities for specifications', () => {
-			expect(result.length).to.equal(2)
-			expect(result[0].imageKey).to.equal('mysql:latest')
-			expect(result[0].available).to.equal(true)
-			expect(result[1].imageKey).to.equal('wordpress:latest')
-			expect(result[1].available).to.equal(false)
+		it('returns availability for an available image', (done) => {
+			const options = {
+				repository: 'wordpress',
+				tag: 'latest',
+			}
+			functions.checkImageAvailability(event, options)
+				.then(({ available, repository, tag }) => {
+					expect(available).to.equal(true)
+					expect(repository).to.equal('wordpress')
+					expect(tag).to.equal('latest')
+					done()
+				})
+		})
+
+		it('returns availability for an unavailable repository', (done) => {
+			const options = {
+				repository: 'WordPress',
+				tag: 'latest',
+			}
+			functions.checkImageAvailability(event, options)
+				.then(({ available, repository, tag }) => {
+					expect(available).to.equal(false)
+					expect(repository).to.equal('WordPress')
+					expect(tag).to.equal('latest')
+					done()
+				})
+		})
+
+		it('returns availability for an unavailable tag', (done) => {
+			const options = {
+				repository: 'wordpress',
+				tag: '0.0.0',
+			}
+			functions.checkImageAvailability(event, options)
+				.then(({ available, repository, tag }) => {
+					expect(available).to.equal(false)
+					expect(repository).to.equal('wordpress')
+					expect(tag).to.equal('0.0.0')
+					done()
+				})
 		})
 	})
 })

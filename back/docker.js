@@ -131,13 +131,13 @@ function stopWordPress() {
  * @returns {Promise}
  * @example
  * const targets = ['mysql:latest', 'wordpress:latest']
- * checkImageAvailabilities(targets)
+ * checkImageAvailability(targets)
  *   .then(details => {
  *     const available = details.every(v => v.available)
  *     console.log('# OK?', available)
  *   })
  */
-function checkImageAvailabilities(event, { targets }) {
+function checkImageAvailability(event, { repository, tag }) {
 	return commandRunner.run('docker image ls --format {{.Repository}}:{{.Tag}}')
 		.then(imageLsResult => {
 			const availableImages = imageLsResult.result
@@ -146,15 +146,11 @@ function checkImageAvailabilities(event, { targets }) {
 				.reduce((allLines, lines) => allLines.concat(lines), [])
 				.filter(line => line)
 
-			const details = targets
-				.map(imageKey => {
-					return {
-						available: availableImages.includes(imageKey),
-						imageKey: imageKey,
-					}
-				})
-
-			return details
+			return {
+				available: availableImages.includes(`${repository}:${tag}`),
+				repository,
+				tag,
+			}
 		})
 }
 
@@ -163,12 +159,12 @@ module.exports = {
 		bridge('checkMachinStatus', checkMachinStatus)
 		bridge('startMachine', startMachine)
 		bridge('stopMachine', stopMachine)
-		bridge('checkImageAvailabilities', checkImageAvailabilities)
+		bridge('checkImageAvailability', checkImageAvailability)
 	},
 
 	functions: {
 		createArgFromPreferences,
 		removeOldThemeDirectories,
-		checkImageAvailabilities,
+		checkImageAvailability,
 	},
 }
