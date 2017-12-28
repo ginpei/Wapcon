@@ -138,6 +138,10 @@ function stopWordPress() {
  *   })
  */
 function checkImageAvailability(event, { repository, tag }) {
+	if (!repository || !tag) {
+		throw new Error('Pair of repository and tag is required')
+	}
+
 	return commandRunner.run('docker image ls --format {{.Repository}}:{{.Tag}}')
 		.then(imageLsResult => {
 			const availableImages = imageLsResult.result

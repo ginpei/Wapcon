@@ -62,8 +62,8 @@ module.exports = {
 
 			// TODO versions
 			const targets = [
-				'mysql:latest',
-				'wordpress:latest',
+				{ repository: 'mysql', tag: 'latest' },
+				{ repository: 'wordpress', tag: 'latest' },
 			]
 
 			Promise.all(targets.map(v => bridge('checkImageAvailability', v)))
