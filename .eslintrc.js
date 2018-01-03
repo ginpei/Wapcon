@@ -4,6 +4,9 @@ module.exports = {
 		"es6": true,
 		"node": true
 	},
+	"parserOptions": {
+		"ecmaVersion": 2017,
+	},
 	"plugins": [
 		"html"
 	],
@@ -213,7 +216,7 @@ module.exports = {
 		"no-useless-constructor": "error",
 		"no-useless-escape": "error",
 		"no-useless-rename": "error",
-		"no-var": "off",
+		"no-var": "error",
 		"no-void": "error",
 		"no-warning-comments": "off",
 		"no-whitespace-before-property": "error",
@@ -258,7 +261,11 @@ module.exports = {
 		"space-before-blocks": "error",
 		"space-before-function-paren": [
 			"error",
-			"never"
+			{
+				"anonymous": "never",
+				"asyncArrow": "always",
+				"named": "never",
+			},
 		],
 		"space-in-parens": [
 			"error",
