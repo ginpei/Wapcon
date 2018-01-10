@@ -85,7 +85,12 @@ module.exports = {
 					errors.forEach(error => console.error(`[${error.type}]`, error.text))
 
 					commit('FINISH_WORKING')
-					dispatch('updateStatus')
+					if (errors.length < 1) {
+						dispatch('updateStatus')
+					}
+					else {
+						dispatch('stop')
+					}
 				})
 				.catch(error => {
 					const errorLog = {
