@@ -23,7 +23,8 @@
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vueify": "^9.4.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "wapcon-docker": "github:ginpei/wapcon-docker"
   },
   "devDependencies": {
     "browserify-hmr": "^0.3.6",

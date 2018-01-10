@@ -60,19 +60,14 @@ module.exports = {
 			commit('START_WORKING')
 			commit('SET_RUNNING', { running: true })
 
-			// TODO versions
-			const targets = [
-				{ repository: 'mysql', tag: 'latest' },
-				{ repository: 'wordpress', tag: 'latest' },
-			]
-
-			Promise.all(targets.map(v => bridge('checkImageAvailability', v)))
-				.then(imageAvailabilities => {
-					if (!imageAvailabilities.every(v => v.available)) {
-						const unavailables = imageAvailabilities
-							.filter(v => !v.available)
-							.map(v => `${v.repository}:${v.tag}`)
-						throw new Error('Images are not ready: ' + unavailables.join(', '))
+			const options = {
+				db: 'latest',
+				wp: 'latest',
+			}
+			bridge('checkImageAvailability', options)
+				.then(imagesStatus => {
+					if (!imagesStatus.ok) {
+						throw new Error('Images are not ready')
 					}
 
 					return bridge('startMachine', rootGetters['preferences/bootOptions'])
