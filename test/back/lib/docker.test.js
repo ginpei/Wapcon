@@ -1,135 +1,82 @@
-const expect = require('chai').expect
-const fs = require('fs')
-const path = require('path')
+const chaiAsPromised = require('chai-as-promised')
+const chai = require('chai')
 const sinon = require('sinon')
 
-const commandRunner = require('../../../back/lib/commandRunner.js')
-const docker = require('../../../back/docker.js')
+const expect = chai.expect
+chai.use(chaiAsPromised)
+
+const wapconDocker = require('wapcon-docker')
+const docker = require('../../../back/docker.js')  // TODO move this file outside "lib" as well as the target
+
 const functions = docker.functions
 
+let result
+
 describe('back/docker', () => {
-	describe('createArgFromPreferences()', () => {
-		let result
+	beforeEach(() => {
+		result = undefined
+	})
 
+	describe('checkMachinStatus', () => {
 		beforeEach(() => {
-			const resolveStub = sinon.stub(path, 'resolve')
-			resolveStub.withArgs('user/db').returns('/path/to/wapcon/user/db')
-			resolveStub.withArgs('user/wp').returns('/path/to/wapcon/user/wp')
-			resolveStub.withArgs('~/my-great-theme').returns('/home/foo/my-great-theme')
+			sinon.stub(wapconDocker, 'checkImageStatus')
+			sinon.stub(wapconDocker, 'checkMachineStatus')
+		})
 
-			result = functions.createArgFromPreferences({
-				databasePath: 'user/db',
-				themeList: [
-					{ id: '123', path: '~/my-great-theme' },
-				],
-				wordpressPath: 'user/wp',
+		afterEach(() => {
+			wapconDocker.checkImageStatus.restore()
+			wapconDocker.checkMachineStatus.restore()
+		})
+
+		describe('when images are not ready', () => {
+			beforeEach(async () => {
+				wapconDocker.checkImageStatus
+					.returns({ ok: false })
+
+				result = await functions.checkMachineStatus()
+			})
+
+			it('does not make status running', () => {
+				expect(result.running).to.equal(false)
 			})
 		})
 
-		afterEach(() => {
-			path.resolve.restore()
+		describe('when containers are not ready', () => {
+			beforeEach(async () => {
+				wapconDocker.checkImageStatus
+					.returns({ ok: true })
+				wapconDocker.checkMachineStatus
+					.returns({ ok: false, wp: true, db: false })
+
+				result = await functions.checkMachineStatus()
+			})
+
+			it('does not make status running', () => {
+				expect(result.running).to.equal(false)
+			})
+
+			it('contains wp status', () => {
+				expect(result.wp).to.equal(true)
+			})
+
+			it('contains db status', () => {
+				expect(result.db).to.equal(false)
+			})
 		})
 
-		it('returns resolved db path', () => {
-			expect(result.databasePath).to.equal('/path/to/wapcon/user/db')
-		})
+		describe('when containers are ready', () => {
+			beforeEach(async () => {
+				wapconDocker.checkImageStatus
+					.returns({ ok: true })
+				wapconDocker.checkMachineStatus
+					.returns({ ok: true })
 
-		it('returns resolved wp path', () => {
-			expect(result.wordpressPath).to.equal('/path/to/wapcon/user/wp')
-		})
+				result = await functions.checkMachineStatus()
+			})
 
-		it('returns `-v` options', () => {
-			expect(result.themeVolumeOptions.length).to.equal(2)
-			expect(result.themeVolumeOptions[0]).to.equal('-v')
-			expect(result.themeVolumeOptions[1]).to.equal('/home/foo/my-great-theme:/var/www/html/wp-content/themes/wapcon-123')
-		})
-	})
-
-	describe('removeOldThemeDirectories()', () => {
-		let rmdirSyncSpy
-
-		beforeEach(() => {
-			sinon.stub(fs, 'readdirSync')
-				.withArgs('/path/to/wp/wp-content/themes').returns(['.', '..', 'twentyfifteen', 'wapcon-0', 'wapcon-1'])
-			rmdirSyncSpy = sinon.spy()
-			sinon.stub(fs, 'rmdirSync')
-				.callsFake(rmdirSyncSpy)
-
-			functions.removeOldThemeDirectories('/path/to/wp')
-		})
-
-		afterEach(() => {
-			fs.readdirSync.restore()
-			fs.rmdirSync.restore()
-		})
-
-		it('removes directories created by ownself', () => {
-			expect(rmdirSyncSpy.callCount).to.equal(2)
-			expect(rmdirSyncSpy.calledWith('/path/to/wp/wp-content/themes/wapcon-0')).to.equal(true)
-			expect(rmdirSyncSpy.calledWith('/path/to/wp/wp-content/themes/wapcon-1')).to.equal(true)
-		})
-	})
-
-	describe('checkImageAvailability()', () => {
-		const event = {}
-		let result
-
-		beforeEach(() => {
-			sinon.stub(commandRunner, 'run')
-
-			commandRunner.run
-				.withArgs('docker image ls --format {{.Repository}}:{{.Tag}}')
-				.returns(Promise.resolve({
-					result: [
-						{ type: 'stdout', text: 'mysql:latest\nwordpress:latest' },
-					],
-				}))
-		})
-
-		afterEach(() => {
-			commandRunner.run.restore()
-		})
-
-		it('returns availability for an available image', (done) => {
-			const options = {
-				repository: 'wordpress',
-				tag: 'latest',
-			}
-			functions.checkImageAvailability(event, options)
-				.then(({ available, repository, tag }) => {
-					expect(available).to.equal(true)
-					expect(repository).to.equal('wordpress')
-					expect(tag).to.equal('latest')
-					done()
-				})
-		})
-
-		it('returns availability for an unavailable repository', (done) => {
-			const options = {
-				repository: 'WordPress',
-				tag: 'latest',
-			}
-			functions.checkImageAvailability(event, options)
-				.then(({ available, repository, tag }) => {
-					expect(available).to.equal(false)
-					expect(repository).to.equal('WordPress')
-					expect(tag).to.equal('latest')
-					done()
-				})
-		})
-
-		it('returns availability for an unavailable tag', (done) => {
-			const options = {
-				repository: 'wordpress',
-				tag: '0.0.0',
-			}
-			functions.checkImageAvailability(event, options)
-				.then(({ available, repository, tag }) => {
-					expect(available).to.equal(false)
-					expect(repository).to.equal('wordpress')
-					expect(tag).to.equal('0.0.0')
-					done()
-				})
+			it('does not make status running', () => {
+				expect(result.running).to.equal(true)
+			})
 		})
 	})
 })
