@@ -8,6 +8,7 @@ module.exports = {
 	state: {
 		databasePath: '',
 		numWorking: 0,
+		machines: [],
 		themeList: [],
 		wordpressPath: '',
 	},
@@ -64,9 +65,10 @@ module.exports = {
 		},
 
 		SET_DATA(state, { data }) {
-			state.databasePath = data.database.path
+			state.databasePath = data.database.path  // DEPRECATED
+			state.machines = data.machines
 			state.themeList = data.theme.list
-			state.wordpressPath = data.wordpress.path
+			state.wordpressPath = data.wordpress.path  // DEPRECATED
 		},
 
 		SET_THEME_LIST(state, { themes }) {
