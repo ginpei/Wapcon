@@ -99,9 +99,7 @@
 			},
 
 			machines() {
-				return this.$store.state.preferences.machines.map((m) => {
-					return { name: m.name, url: `http://${m.host}:${m.port}` }
-				})
+				return this.$store.state.preferences.machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
 			},
 
 			themes() {
