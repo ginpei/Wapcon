@@ -2,18 +2,16 @@
 	.baseLayout
 
 		section.baseLayout-section
-			h1 Machine
+			h1 Machines
 
 			div.machine-toolbar
+				GSwitch(:on="machineRunning" :executing="machineWorking" :onClick="onToggleMachine")
 				GIconButton.seeErrors(v-show="machineFailed" :onPress="seeErrors_oncClick" title="See errors" icon="exclamation-circle") {{$store.state.machine.errors.length}}
 				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 
-			div.machine-controlPanel
-				div.machine-controlPanel-switch
-					GSwitch(:on="machineRunning" :executing="machineWorking" :onClick="onToggleMachine")
-				div.machine-controlPanel-info
-					div
-						a(:class="linkClasses" href="http://localhost") http://localhost
+			ul.machine-list
+				li.machine-lite-item(v-for="machine in machines")
+					a(:class="linkClasses" :href="machine.url" :title="machine.url") {{machine.name}}
 
 		section.baseLayout-section
 			h1 Themes
@@ -49,9 +47,11 @@
 		text-align: right
 		margin-bottom: 1rem
 
-	.machine-controlPanel
-		display: grid
-		grid-template-columns: 50% 50%
+		& > *
+			margin-left: 0.5rem
+
+	.machine-list
+		margin: 0
 
 	.seeErrors
 		color: #900
@@ -96,6 +96,10 @@
 
 			inactiveThemes() {
 				return this.$store.getters['preferences/inactiveThemes']
+			},
+
+			machines() {
+				return this.$store.state.preferences.machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
 			},
 
 			themes() {

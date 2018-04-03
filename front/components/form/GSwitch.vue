@@ -10,10 +10,11 @@
 </template>
 
 <style lang="sass" scoped>
-	$height: 2.5rem
+	$height: 2rem
 
 	.switch
 		border: 1px solid #999
+		box-sizing: border-box
 		display: inline-block
 		height: $height
 		overflow: hidden
@@ -21,6 +22,7 @@
 		tap-highlight-color: transparent
 		text-shadow: 1px 1px #fff
 		user-select: none
+		vertical-align: middle
 		width: $height * 3
 
 	.checkbox
