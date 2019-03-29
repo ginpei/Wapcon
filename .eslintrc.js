@@ -10,6 +10,9 @@ module.exports = {
 	"plugins": [
 		"html"
 	],
+  "settings": {
+		"html/html-extensions": [".html", ".vue"],
+	},
 	"extends": "eslint:recommended",
 	"rules": {
 		"accessor-pairs": "error",
