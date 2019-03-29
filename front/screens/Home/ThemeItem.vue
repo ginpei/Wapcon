@@ -101,84 +101,84 @@
 </style>
 
 <script>
-	const bridge = require('../../lib/bridge.js')
-	const GIconButton = require('../../components/form/GIconButton.vue')
+const bridge = require('../../lib/bridge.js')
+const GIconButton = require('../../components/form/GIconButton.vue')
 
-	module.exports = {
-		components: {
-			GIconButton,
-		},
+module.exports = {
+	components: {
+		GIconButton,
+	},
 
-		props: [
-			'selected',
-			'theme',
-		],
+	props: [
+		'selected',
+		'theme',
+	],
 
-		data() {
+	data() {
+		return {
+			noThumbnail: true,
+		}
+	},
+
+	computed: {
+		classes() {
 			return {
-				noThumbnail: true,
+				'-noThumbnail': this.noThumbnail,
 			}
 		},
 
-		computed: {
-			classes() {
-				return {
-					'-noThumbnail': this.noThumbnail,
-				}
-			},
-
-			originalThumbnailUrl() {
-				return `${this.theme.path}/screenshot.png`
-			},
-
-			thumbnailUrl() {
-				const emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-				return this.noThumbnail ? emptyImageUrl : this.originalThumbnailUrl
-			},
+		originalThumbnailUrl() {
+			return `${this.theme.path}/screenshot.png`
 		},
 
-		mounted() {
-			bridge('fs.exists', { path: this.originalThumbnailUrl })
-				.then(({ existing }) => {
-					this.noThumbnail = !existing
-				})
+		thumbnailUrl() {
+			const emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+			return this.noThumbnail ? emptyImageUrl : this.originalThumbnailUrl
+		},
+	},
+
+	mounted() {
+		bridge('fs.exists', { path: this.originalThumbnailUrl })
+			.then(({ existing }) => {
+				this.noThumbnail = !existing
+			})
+	},
+
+	methods: {
+		save() {
+			this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
 		},
 
-		methods: {
-			save() {
-				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
-			},
+		onClick(event) {
+			// do nothing if users intended another
+			if (event.target.closest('button')) {
+				return
+			}
 
-			onClick(event) {
-				// do nothing if users intended another
-				if (event.target.closest('button')) {
-					return
-				}
-
-				this.$emit('click', event, this.theme)
-			},
-
-			remove_onClick() {
-				this.$store.dispatch('preferences/removeThemes', { themeIds: [this.theme.id] })
-			},
-
-			open_onClick() {
-				bridge('openDirectory', { dirPath: this.theme.path })
-			},
-
-			edit_onClick() {
-				this.$router.push(`/themes/${this.theme.id}/edit`)
-			},
-
-			enable_onClick() {
-				this.theme.active = true
-				this.save()
-			},
-
-			disable_onClick() {
-				this.theme.active = false
-				this.save()
-			},
+			this.$emit('click', event, this.theme)
 		},
-	}
+
+		remove_onClick() {
+			this.$store.dispatch('preferences/removeThemes', { themeIds: [this.theme.id] })
+		},
+
+		open_onClick() {
+			bridge('openDirectory', { dirPath: this.theme.path })
+		},
+
+		edit_onClick() {
+			this.$router.push(`/themes/${this.theme.id}/edit`)
+		},
+
+		enable_onClick() {
+			this.theme.active = true
+			this.save()
+		},
+
+		disable_onClick() {
+			this.theme.active = false
+			this.save()
+		},
+	},
+}
 </script>

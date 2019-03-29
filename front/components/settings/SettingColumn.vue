@@ -14,9 +14,9 @@
 </style>
 
 <script>
-	module.exports = {
-		props: [
-			'title',
-		],
-	}
+module.exports = {
+	props: [
+		'title',
+	],
+}
 </script>

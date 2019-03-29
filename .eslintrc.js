@@ -7,13 +7,10 @@ module.exports = {
 	"parserOptions": {
 		"ecmaVersion": 2017,
 	},
-	"plugins": [
-		"html"
+	"extends": [
+		"eslint:recommended",
+		"plugin:vue/recommended",
 	],
-  "settings": {
-		"html/html-extensions": [".html", ".vue"],
-	},
-	"extends": "eslint:recommended",
 	"rules": {
 		"accessor-pairs": "error",
 		"array-bracket-spacing": "error",

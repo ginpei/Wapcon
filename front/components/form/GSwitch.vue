@@ -86,17 +86,17 @@
 </style>
 
 <script>
-	module.exports = {
-		props: [
-			'executing',
-			'on',
-			'onClick',
-		],
+module.exports = {
+	props: [
+		'executing',
+		'on',
+		'onClick',
+	],
 
-		methods: {
-			root_onClick(event) {
-				this.onClick({ on: !this.on })
-			},
+	methods: {
+		root_onClick(event) {
+			this.onClick({ on: !this.on })
 		},
-	}
+	},
+}
 </script>

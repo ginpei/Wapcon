@@ -4,9 +4,9 @@
 </template>
 
 <script>
-	module.exports = {
-		props: [
-			'theme',
-		],
-	}
+module.exports = {
+	props: [
+		'theme',
+	],
+}
 </script>

@@ -9,29 +9,29 @@
 </style>
 
 <script>
-	module.exports = {
-		// will be extended
-		props: [
-			'readonly',
-			'value',
-		],
+module.exports = {
+	// will be extended
+	props: [
+		'readonly',
+		'value',
+	],
 
-		data() {
-			return {
-				currentValue: this.value,
-			}
-		},
+	data() {
+		return {
+			currentValue: this.value,
+		}
+	},
 
-		watch: {
-			value(value) {
-				this.currentValue = value
-			},
+	watch: {
+		value(value) {
+			this.currentValue = value
 		},
+	},
 
-		methods: {
-			pathEvent(event) {
-				this.$emit(event.type, event)
-			},
+	methods: {
+		pathEvent(event) {
+			this.$emit(event.type, event)
 		},
-	}
+	},
+}
 </script>

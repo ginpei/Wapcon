@@ -32,99 +32,99 @@
 </style>
 
 <script>
-	const GHeading = require('../../components/form/GHeading.vue')
-	const GIconButton = require('../../components/form/GIconButton.vue')
-	const ThemeListRow = require('./ThemeListRow.vue')
+const GHeading = require('../../components/form/GHeading.vue')
+const GIconButton = require('../../components/form/GIconButton.vue')
+const ThemeListRow = require('./ThemeListRow.vue')
 
-	const bridge = require('../../lib/bridge.js')
-	const dialog = require('../../lib/dialog.js')
+const bridge = require('../../lib/bridge.js')
+const dialog = require('../../lib/dialog.js')
 
-	module.exports = {
-		components: {
-			GHeading,
-			GIconButton,
-			ThemeListRow,
+module.exports = {
+	components: {
+		GHeading,
+		GIconButton,
+		ThemeListRow,
+	},
+
+	data() {
+		return {
+			selectedIds: [],
+		}
+	},
+
+	computed: {
+		editingAvailable() {
+			return this.selectedIds.length === 1
 		},
 
-		data() {
-			return {
-				selectedIds: [],
+		deletingAvailable() {
+			return this.selectedIds.length > 0
+		},
+
+		selectedThemes() {
+			return this.selectedIds
+				.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
+				.filter(v => v)  // ignore not-found ones
+		},
+	},
+
+	methods: {
+		addThemePath(themePath) {
+			this.$store.dispatch('preferences/addThemePath', { themePath })
+		},
+
+		edit(themeId = null) {
+			if (themeId === null) {
+				themeId = this.selectedIds[0]
 			}
+			this.$router.push(`/themes/${themeId}/edit`)
 		},
 
-		computed: {
-			editingAvailable() {
-				return this.selectedIds.length === 1
-			},
-
-			deletingAvailable() {
-				return this.selectedIds.length > 0
-			},
-
-			selectedThemes() {
-				return this.selectedIds
-					.map(id => this.$store.state.preferences.themeList.find(v => v.id === id))  // id -> theme
-					.filter(v => v)  // ignore not-found ones
-			},
+		removeThemePath(themeIds) {
+			this.$store.dispatch('preferences/removeThemes', { themeIds })
+			this.selectedIds.length = 0  // remove all selection
 		},
 
-		methods: {
-			addThemePath(themePath) {
-				this.$store.dispatch('preferences/addThemePath', { themePath })
-			},
-
-			edit(themeId = null) {
-				if (themeId === null) {
-					themeId = this.selectedIds[0]
-				}
-				this.$router.push(`/themes/${themeId}/edit`)
-			},
-
-			removeThemePath(themeIds) {
-				this.$store.dispatch('preferences/removeThemes', { themeIds })
-				this.selectedIds.length = 0  // remove all selection
-			},
-
-			themes_onDblClick() {
-				this.edit()
-			},
-
-			add_onClick() {
-				dialog.showOpenDialog({ properties: ['openDirectory'] })
-					.then(result => {
-						// cancelled
-						if (!result) {
-							return
-						}
-
-						const path = result[0]
-						this.addThemePath(path)
-					})
-			},
-
-			edit_onClick() {
-				this.edit()
-			},
-
-			open_onClick() {
-				const id = this.selectedIds[0]
-				const theme = this.$store.state.preferences.themeList.find(v => v.id === id)
-				bridge('openDirectory', { dirPath: theme.path })
-			},
-
-			remove_onClick() {
-				const selectedThemeNameListText = this.selectedThemes
-					.map(v => `- ${v.name}`)
-					.join('\n')
-
-				const message = 'Are you sure you want to remove followings from the list?\n\n' + selectedThemeNameListText
-				dialog.ask(message)
-					.then(ok => {
-						if (ok) {
-							this.removeThemePath(this.selectedIds)
-						}
-					})
-			},
+		themes_onDblClick() {
+			this.edit()
 		},
-	}
+
+		add_onClick() {
+			dialog.showOpenDialog({ properties: ['openDirectory'] })
+				.then(result => {
+					// cancelled
+					if (!result) {
+						return
+					}
+
+					const path = result[0]
+					this.addThemePath(path)
+				})
+		},
+
+		edit_onClick() {
+			this.edit()
+		},
+
+		open_onClick() {
+			const id = this.selectedIds[0]
+			const theme = this.$store.state.preferences.themeList.find(v => v.id === id)
+			bridge('openDirectory', { dirPath: theme.path })
+		},
+
+		remove_onClick() {
+			const selectedThemeNameListText = this.selectedThemes
+				.map(v => `- ${v.name}`)
+				.join('\n')
+
+			const message = 'Are you sure you want to remove followings from the list?\n\n' + selectedThemeNameListText
+			dialog.ask(message)
+				.then(ok => {
+					if (ok) {
+						this.removeThemePath(this.selectedIds)
+					}
+				})
+		},
+	},
+}
 </script>

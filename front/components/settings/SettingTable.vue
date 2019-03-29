@@ -19,9 +19,9 @@
 </style>
 
 <script>
-	module.exports = {
-		props: [
-			'heading',
-		],
-	}
+module.exports = {
+	props: [
+		'heading',
+	],
+}
 </script>

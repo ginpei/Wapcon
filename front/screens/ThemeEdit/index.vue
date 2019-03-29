@@ -25,53 +25,53 @@
 </style>
 
 <script>
-	const GIconButton = require('../../components/form/GIconButton.vue')
-	const {
+const GIconButton = require('../../components/form/GIconButton.vue')
+const {
+	SettingColumn,
+	SettingInput,
+	SettingLayout,
+	SettingTable,
+} = require('../../components/settings/index.js')
+
+module.exports = {
+	components: {
+		GIconButton,
 		SettingColumn,
 		SettingInput,
 		SettingLayout,
 		SettingTable,
-	} = require('../../components/settings/index.js')
+	},
 
-	module.exports = {
-		components: {
-			GIconButton,
-			SettingColumn,
-			SettingInput,
-			SettingLayout,
-			SettingTable,
+	data() {
+		const id = this.$route.params.id
+		const theme = this.$store.state.preferences.themeList.find(v => v.id === id) || {}
+		return {
+			originalName: theme.name,
+			theme: theme,
+		}
+	},
+
+	created() {
+		// if not found, get back home
+		if (!this.theme.id) {
+			this.$router.push('/')
+		}
+	},
+
+	methods: {
+		save() {
+			this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
 		},
 
-		data() {
-			const id = this.$route.params.id
-			const theme = this.$store.state.preferences.themeList.find(v => v.id === id) || {}
-			return {
-				originalName: theme.name,
-				theme: theme,
-			}
+		name_onChange(event) {
+			this.theme.name = event.target.value
+			this.save()
 		},
 
-		created() {
-			// if not found, get back home
-			if (!this.theme.id) {
-				this.$router.push('/')
-			}
+		revert_onClick() {
+			this.theme.name = this.originalName
+			this.save()
 		},
-
-		methods: {
-			save() {
-				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
-			},
-
-			name_onChange(event) {
-				this.theme.name = event.target.value
-				this.save()
-			},
-
-			revert_onClick() {
-				this.theme.name = this.originalName
-				this.save()
-			},
-		},
-	}
+	},
+}
 </script>

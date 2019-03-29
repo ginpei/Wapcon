@@ -65,138 +65,138 @@
 </style>
 
 <script>
-	const dialog = require('../../lib/dialog.js')
-	const GSwitch = require('../../components/form/GSwitch.vue')
-	const GIconButton = require('../../components/form/GIconButton.vue')
-	const ThemeItem = require('./ThemeItem.vue')
+const dialog = require('../../lib/dialog.js')
+const GSwitch = require('../../components/form/GSwitch.vue')
+const GIconButton = require('../../components/form/GIconButton.vue')
+const ThemeItem = require('./ThemeItem.vue')
 
-	module.exports = {
-		components: {
-			GIconButton,
-			GSwitch,
-			ThemeItem,
-		},
+module.exports = {
+	components: {
+		GIconButton,
+		GSwitch,
+		ThemeItem,
+	},
 
-		data() {
+	data() {
+		return {
+			selectedThemeIds: [],
+		}
+	},
+
+	computed: {
+		linkClasses() {
 			return {
-				selectedThemeIds: [],
+				disabled: !this.machineRunning,
 			}
 		},
 
-		computed: {
-			linkClasses() {
-				return {
-					disabled: !this.machineRunning,
-				}
-			},
+		activeThemes() {
+			return this.$store.getters['preferences/activeThemes']
+		},
 
-			activeThemes() {
-				return this.$store.getters['preferences/activeThemes']
-			},
+		inactiveThemes() {
+			return this.$store.getters['preferences/inactiveThemes']
+		},
 
-			inactiveThemes() {
-				return this.$store.getters['preferences/inactiveThemes']
-			},
+		machines() {
+			return this.$store.state.preferences.machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
+		},
 
-			machines() {
-				return this.$store.state.preferences.machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
-			},
+		themes() {
+			return this.$store.state.preferences.themeList
+		},
 
-			themes() {
-				return this.$store.state.preferences.themeList
-			},
+		machineRunning() {
+			return this.$store.state.machine.running
+		},
 
-			machineRunning() {
-				return this.$store.state.machine.running
-			},
+		machineWorking() {
+			return this.$store.getters['machine/working']
+		},
 
-			machineWorking() {
-				return this.$store.getters['machine/working']
-			},
+		machineFailed() {
+			return this.$store.getters['machine/failed']
+		},
 
-			machineFailed() {
-				return this.$store.getters['machine/failed']
-			},
-
-			machineErrorMessage() {
-				const errors = this.$store.state.machine.errors
-				const message =
+		machineErrorMessage() {
+			const errors = this.$store.state.machine.errors
+			const message =
 					'Error:\n\n' +
 					errors.map(v => `${v.type}: ${v.text}`).join('\n')
-				return message
-			},
+			return message
+		},
+	},
+
+	created() {
+		this.updateMachineStatus()
+		this.$store.dispatch('preferences/load')
+	},
+
+	methods: {
+		isSelectedTheme(theme) {
+			return this.selectedThemeIds.includes(theme.id)
 		},
 
-		created() {
-			this.updateMachineStatus()
-			this.$store.dispatch('preferences/load')
+		updateMachineStatus() {
+			this.$store.dispatch('machine/updateStatus')
 		},
 
-		methods: {
-			isSelectedTheme(theme) {
-				return this.selectedThemeIds.includes(theme.id)
-			},
+		onToggleMachine({ on }) {
+			if (this.$store.getters['machine/working']) {
+				return
+			}
 
-			updateMachineStatus() {
-				this.$store.dispatch('machine/updateStatus')
-			},
-
-			onToggleMachine({ on }) {
-				if (this.$store.getters['machine/working']) {
-					return
-				}
-
-				if (on) {
-					this.$store.dispatch('machine/start')
-				}
-				else {
-					this.$store.dispatch('machine/stop')
-				}
-			},
-
-			addThemePath(themePath) {
-				this.$store.dispatch('preferences/addThemePath', { themePath })
-			},
-
-			seeErrors_oncClick() {
-				dialog.inform(this.machineErrorMessage, { buttons: ['Close', 'Clear'] })
-					.then(buttonIndex => {
-						// clear
-						if (buttonIndex === 1) {
-							this.$store.dispatch('machine/clearErrors')
-						}
-					})
-			},
-			preferences_oncClick() {
-				this.$router.push('/preferences')
-			},
-
-			refresh_onClick() {
-				// TODO
-			},
-
-			add_onClick() {
-				dialog.showOpenDialog({ properties: ['openDirectory'] })
-					.then(result => {
-						// cancelled
-						if (!result) {
-							return
-						}
-
-						const path = result[0]
-						this.addThemePath(path)
-					})
-			},
-
-			themeItem_onClick(event, theme) {
-				const index = this.selectedThemeIds.indexOf(theme.id)
-				if (index >= 0) {
-					this.selectedThemeIds.splice(index, 1)
-				}
-				else {
-					this.selectedThemeIds.push(theme.id)
-				}
-			},
+			if (on) {
+				this.$store.dispatch('machine/start')
+			}
+			else {
+				this.$store.dispatch('machine/stop')
+			}
 		},
-	}
+
+		addThemePath(themePath) {
+			this.$store.dispatch('preferences/addThemePath', { themePath })
+		},
+
+		seeErrors_oncClick() {
+			dialog.inform(this.machineErrorMessage, { buttons: ['Close', 'Clear'] })
+				.then(buttonIndex => {
+					// clear
+					if (buttonIndex === 1) {
+						this.$store.dispatch('machine/clearErrors')
+					}
+				})
+		},
+		preferences_oncClick() {
+			this.$router.push('/preferences')
+		},
+
+		refresh_onClick() {
+			// TODO
+		},
+
+		add_onClick() {
+			dialog.showOpenDialog({ properties: ['openDirectory'] })
+				.then(result => {
+					// cancelled
+					if (!result) {
+						return
+					}
+
+					const path = result[0]
+					this.addThemePath(path)
+				})
+		},
+
+		themeItem_onClick(event, theme) {
+			const index = this.selectedThemeIds.indexOf(theme.id)
+			if (index >= 0) {
+				this.selectedThemeIds.splice(index, 1)
+			}
+			else {
+				this.selectedThemeIds.push(theme.id)
+			}
+		},
+	},
+}
 </script>
