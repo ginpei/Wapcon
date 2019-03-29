@@ -16,25 +16,25 @@
 </style>
 
 <script>
-	const GButton = require('../../components/form/GButton.vue')
+const GButton = require('../../components/form/GButton.vue')
 
-	module.exports = {
-		components: {
-			GButton,
+module.exports = {
+	components: {
+		GButton,
+	},
+
+	props: [
+		'icon',
+		'title',
+		'onPress',
+	],
+
+	computed: {
+		classes() {
+			return {
+				[`fa-${this.icon}`]: true,
+			}
 		},
-
-		props: [
-			'icon',
-			'title',
-			'onPress',
-		],
-
-		computed: {
-			classes() {
-				return {
-					[`fa-${this.icon}`]: true,
-				}
-			},
-		},
-	}
+	},
+}
 </script>

@@ -23,45 +23,45 @@
 </style>
 
 <script>
-	const GIconButton = require('../../components/form/GIconButton.vue')
-	const {
+const GIconButton = require('../../components/form/GIconButton.vue')
+const {
+	SettingColumn,
+	SettingInput,
+	SettingLayout,
+	SettingTable,
+} = require('../../components/settings/index.js')
+
+module.exports = {
+	components: {
+		GIconButton,
 		SettingColumn,
 		SettingInput,
 		SettingLayout,
 		SettingTable,
-	} = require('../../components/settings/index.js')
+	},
 
-	module.exports = {
-		components: {
-			GIconButton,
-			SettingColumn,
-			SettingInput,
-			SettingLayout,
-			SettingTable,
+	data() {
+		return {
+		}
+	},
+
+	created() {
+		this.$store.dispatch('preferences/load')
+	},
+
+	methods: {
+		save() {
+			this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
 		},
 
-		data() {
-			return {
-			}
+		name_onChange() {
+			this.save()
 		},
 
-		created() {
-			this.$store.dispatch('preferences/load')
+		revert_onClick() {
+			this.theme.name = this.originalName
+			this.save()
 		},
-
-		methods: {
-			save() {
-				this.$store.dispatch('preferences/updateTheme', { theme: this.theme })
-			},
-
-			name_onChange() {
-				this.save()
-			},
-
-			revert_onClick() {
-				this.theme.name = this.originalName
-				this.save()
-			},
-		},
-	}
+	},
+}
 </script>

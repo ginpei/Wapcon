@@ -27,18 +27,18 @@
 </style>
 
 <script>
-	module.exports = {
-		props: [
-			'title',
-			'onPress',
-		],
+module.exports = {
+	props: [
+		'title',
+		'onPress',
+	],
 
-		methods: {
-			button_onClick(event) {
-				if (this.onPress) {
-					this.onPress(event)
-				}
-			},
+	methods: {
+		button_onClick(event) {
+			if (this.onPress) {
+				this.onPress(event)
+			}
 		},
-	}
+	},
+}
 </script>
