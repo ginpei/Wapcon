@@ -10,6 +10,8 @@
 				GIconButton(:onPress="preferences_oncClick" title="Settings" icon="cog")
 
 			ul.machine-list
+				li.machine-lite-item(v-if="machines.length < 1")
+					| No machines
 				li.machine-lite-item(v-for="machine in machines")
 					a(:class="linkClasses" :href="machine.url" :title="machine.url") {{machine.name}}
 
@@ -99,7 +101,8 @@ module.exports = {
 		},
 
 		machines() {
-			return this.$store.state.preferences.machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
+			const { machines = [] } = this.$store.state.preferences
+			return machines.map((m) => ({ name: m.name, url: `http://${m.host}:${m.port}` }))
 		},
 
 		themes() {
