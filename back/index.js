@@ -13,6 +13,7 @@ let win;
 function createWindow() {
 	win = new BrowserWindow({
 		height: 500,
+		webPreferences: { nodeIntegration: true },
 		width: 500,
 	});
 
